@@ -148,34 +148,3 @@ body::before {
     margin-right: auto;
   }
 }
-
-
-
-/* 1. Reduce blur intensity */
-@media (min-width: 768px) {
-  .backdrop-blur-2xl { backdrop-filter: blur(6px); }
-}
-
-/* 2. Promote important elements to compositing layer */
-.motion-img, .pink-glow, .fixed-bg {
-  will-change: transform, opacity;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  pointer-events: none; /* glow is decorative, prevents extra hit testing */
-}
-
-/* 3. Lazy decode images fallback */
-img { image-rendering: optimizeQuality; }
-img[loading="lazy"] { opacity: 0; transition: opacity .25s ease; }
-img[loading="lazy"].loaded { opacity: 1; }
-
-/* 4. Stop inner scroll anchoring */
-#scroll-container { overflow-anchor: none; }
-
-/* small screens: reduce overlays */
-@media (max-width: 767px) {
-  .pink-glow, .backdrop-blur-2xl { display: none; }
-}
-
-
