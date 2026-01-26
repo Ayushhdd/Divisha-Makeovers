@@ -1,5 +1,5 @@
 export default function sitemap() {
-    const baseUrl = "https://divishamakeovers.com";
+    const baseUrl = "https://divisha-makeovers.vercel.app";
 
     return [
         {

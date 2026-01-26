@@ -4,6 +4,6 @@ export default function robots() {
             userAgent: "*",
             allow: "/",
         },
-        sitemap: "https://divishamakeovers.com/sitemap.xml",
+        sitemap: "https://divisha-makeovers.vercel.app/sitemap.xml",
     };
 }

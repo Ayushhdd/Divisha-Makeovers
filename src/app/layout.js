@@ -22,7 +22,7 @@ export const metadata = {
   openGraph: {
     title: "Divisha Makeovers | Luxury Bridal Makeup Artist",
     description: "Premium bridal and party makeup services.",
-    url: "https://divishamakeovers.com",
+    url: "https://divisha-makeovers.vercel.app",
     siteName: "Divisha Makeovers",
     locale: "en_US",
     type: "website",
