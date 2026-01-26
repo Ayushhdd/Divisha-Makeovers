@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
 
@@ -117,7 +118,7 @@ Please let me know availability and details.
 
       {/* CINEMATIC PARALLAX BACKGROUND (GPU promoted) */}
       <motion.div
-        className="fixed inset-0 z-0 will-change-transform"
+        className="fixed inset-0 z-0"
         style={{
           y: bgY,
           backgroundImage: "url('/party-bg/partybg1.jpg')",
@@ -188,9 +189,15 @@ Please let me know availability and details.
                         key={i}
                         whileHover={{ scale: 1.04 }}
                         transition={{ duration: 0.45 }}
-                        className="aspect-[3/4] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] will-change-transform"
+                        className="aspect-[3/4] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] relative"
                       >
-                        <img src={img} alt={section.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                        <Image
+                          src={img}
+                          alt={section.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover"
+                        />
                       </motion.div>
                     ))}
                   </div>
@@ -200,13 +207,12 @@ Please let me know availability and details.
                 <div
                   className={`self-center w-full max-w-[720px] rounded-[2rem] p-10 backdrop-blur-md border shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_30px_80px_rgba(0,0,0,0.5)]
                   ${imageLeft ? "lg:order-2" : "lg:order-1"}
-                  ${
-                    section.isLuxury
+                  ${section.isLuxury
                       ? "bg-black/55 border-white/20"
                       : section.isBestSeller
-                      ? "bg-black/42 border-white/15"
-                      : "bg-black/32 border-white/10"
-                  }`}
+                        ? "bg-black/42 border-white/15"
+                        : "bg-black/32 border-white/10"
+                    }`}
                 >
                   {section.isBestSeller && (
                     <div className="inline-block mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs tracking-widest uppercase font-semibold">

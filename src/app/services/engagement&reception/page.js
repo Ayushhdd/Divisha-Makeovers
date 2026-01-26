@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
 
@@ -101,7 +102,7 @@ Please share availability and further details.
 
       {/* ===== FIXED BACKGROUND (GPU PROMOTED) ===== */}
       <motion.div
-        className="fixed inset-0 z-0 will-change-transform"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: "url('/engagement-bg/engagementbg.jpg')",
           backgroundSize: "cover",
@@ -170,14 +171,14 @@ Please share availability and further details.
                       <motion.div
                         key={i}
                         whileHover={{ scale: 1.03 }}
-                        className="aspect-[3/4] overflow-hidden rounded-2xl bg-white/5 border border-white/10 will-change-transform"
+                        className="aspect-[3/4] overflow-hidden rounded-2xl bg-white/5 border border-white/10 relative"
                       >
-                        <img
+                        <Image
                           src={img}
                           alt={section.title}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover"
                         />
                       </motion.div>
                     ))}
@@ -187,7 +188,7 @@ Please share availability and further details.
                 {/* TEXT */}
                 <div
                   className={`${section.reverse ? "lg:order-1" : "lg:order-2"} 
-                  rounded-3xl bg-black/40 backdrop-blur-lg p-10 border border-white/10`}
+                  rounded-3xl bg-black/60 backdrop-blur-md p-10 border border-white/10`}
                 >
                   {section.isBestSeller && (
                     <div className="mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs uppercase w-fit">

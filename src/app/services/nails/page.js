@@ -85,7 +85,7 @@ Please share details, availability, and nail design options.`;
 
       {/* FIXED BACKGROUND (GPU promoted) */}
       <div
-        className="fixed inset-0 z-0 will-change-transform"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: "url('/nails-bg/nailsbg.png')",
           backgroundSize: "cover",
@@ -102,7 +102,7 @@ Please share details, availability, and nail design options.`;
 
       {/* SOFT PINK AMBIENT GLOW */}
       <div
-        className="fixed inset-0 z-10 pointer-events-none will-change-transform"
+        className="fixed inset-0 z-10 pointer-events-none"
         style={{
           background:
             "radial-gradient(ellipse at top, rgba(236,72,153,0.18), transparent 60%)",
@@ -153,7 +153,7 @@ Please share details, availability, and nail design options.`;
                 key={index}
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.55)] will-change-transform"
+                className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
               >
                 {/* next/image is used — priority for first two, others lazy by default */}
                 <Image
@@ -180,7 +180,7 @@ Please share details, availability, and nail design options.`;
               ].map((pkg, i) => (
                 <div
                   key={i}
-                  className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-[0_25px_70px_rgba(0,0,0,0.55)] flex flex-col"
+                  className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-[0_25px_70px_rgba(0,0,0,0.55)] flex flex-col"
                 >
                   <div>
                     <h3 className="text-xl mb-2">{pkg.title}</h3>

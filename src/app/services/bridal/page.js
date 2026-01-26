@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
 
@@ -138,7 +139,7 @@ Please let me know availability and further details.
 
       {/* Fixed background - promoted to its own layer */}
       <motion.div
-        className="fixed inset-0 z-0 will-change-transform"
+        className="fixed inset-0 z-0"
         style={{
           backgroundImage: "url('/bridal-bg/bridalbg.jpg')",
           backgroundSize: "cover",
@@ -209,35 +210,33 @@ Please let me know availability and further details.
             <div className="grid gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
               {/* IMAGES */}
               <div
-                className={`${
-                  section.reverse ? "lg:order-2 max-w-[900px]" : "lg:order-1 max-w-[700px]"
-                } w-full`}
+                className={`${section.reverse ? "lg:order-2 max-w-[900px]" : "lg:order-1 max-w-[700px]"
+                  } w-full`}
               >
-                <div className="grid grid-cols-2 gap-4">
-                  {section.images.map((img, i) => (
-                    <motion.div
-                      key={i}
-                      whileHover={{ scale: 1.03 }}
-                      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-                      className="aspect-[3/4] max-h-[620px] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] will-change-transform"
-                    >
-                      <img
-                        src={img}
-                        alt={section.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {section.images.map((img, i) => (
+                      <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                        className="aspect-[3/4] max-h-[620px] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] relative"
+                      >
+                        <Image
+                          src={img}
+                          alt={section.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover"
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
               </div>
 
               {/* TEXT */}
               <div
-                className={`${
-                  section.reverse ? "lg:order-1" : "lg:order-2"
-                } relative rounded-3xl bg-black/28 backdrop-blur-lg p-10 border border-white/10`}
+                className={`${section.reverse ? "lg:order-1" : "lg:order-2"
+                  } relative rounded-3xl bg-black/60 backdrop-blur-md p-10 border border-white/10`}
               >
                 {/* BADGES */}
                 {section.title === "Signature Highly Defined (HD) Bridal Package" && (
@@ -254,13 +253,12 @@ Please let me know availability and further details.
 
                 {/* TITLE */}
                 <h2
-                  className={`mb-4 tracking-wide ${
-                    section.title === "Airbrush Bridal"
+                  className={`mb-4 tracking-wide ${section.title === "Airbrush Bridal"
                       ? "text-6xl"
                       : section.title === "Signature Highly Defined (HD) Bridal Package"
-                      ? "text-5xl"
-                      : "text-4xl"
-                  }`}
+                        ? "text-5xl"
+                        : "text-4xl"
+                    }`}
                 >
                   {section.title}
                 </h2>
