@@ -11,7 +11,8 @@ html, body {
 }
 
 body {
-  overscroll-behavior: none;
+  overscroll-behavior-y: auto;
+  overscroll-behavior-x: none;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter);
@@ -177,15 +178,4 @@ img[loading="lazy"].loaded { opacity: 1; }
   .pink-glow, .backdrop-blur-2xl { display: none; }
 }
 
-
-
-/* --- Immediately allow touch/scroll through decorative fixed overlays --- */
-/* This forces decorative full-screen overlays to be non-interactive,
-   so touch/scroll go to the page under them. */
-.fixed.inset-0.z-10,
-.fixed.inset-0.z-20,
-.fixed.inset-0.z-30,
-.fixed.inset-0 {
-  pointer-events: none !important;
-}
 
