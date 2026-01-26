@@ -1,9 +1,6 @@
-"use client";
-
 import "./globals.css";
 import { Playfair_Display, Inter } from "next/font/google";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import PageWrapper from "./components/PageWrapper";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -15,26 +12,35 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+export const metadata = {
+  title: {
+    default: "Divisha Makeovers | Luxury Bridal Makeup Artist",
+    template: "%s | Divisha Makeovers",
+  },
+  description: "Divisha Makeovers offers premium bridal, engagement, and party makeup services. Expert artistry for your special day.",
+  keywords: ["Bridal Makeup", "Makeup Artist", "Luxury Makeup", "Wedding Makeup", "Divisha Makeovers"],
+  openGraph: {
+    title: "Divisha Makeovers | Luxury Bridal Makeup Artist",
+    description: "Premium bridal and party makeup services.",
+    url: "https://divishamakeovers.com",
+    siteName: "Divisha Makeovers",
+    locale: "en_US",
+    type: "website",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+};
+
 export default function RootLayout({ children }) {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    // wait one frame so browser finishes paint
-    requestAnimationFrame(() => setReady(true));
-  }, []);
-
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${inter.variable}`}>
-      <motion.main
-  initial={{ opacity: 0, y: 16 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1.2, ease: "easeOut" }}
->
-
-  {children}
-</motion.main>
-
+        <PageWrapper>
+          {children}
+        </PageWrapper>
       </body>
     </html>
   );
