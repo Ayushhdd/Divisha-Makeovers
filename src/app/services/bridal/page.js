@@ -7,29 +7,29 @@ import ClosingEditorial from "@/app/components/ClosingEditorial";
 
 const bridalSections = [
   {
-  title: "Classic Bridal Package",
-  price: "₹16,500",
-  desc: "A timeless bridal look with traditional techniques, perfect for natural elegance and long ceremonies.",
-  includes: [
-    "Basic Bridal Makeup",
-    "Bridal hairstyling",
-    "Eyelashes",
-    "Coloured lenses",
-    "Outfit draping",
-    "Hair extensions (If needed)"
-  ],
-  notes: [
-    "Fresh flowers need to be carried by the client themselves.",
-    "Booking is non-refundable and non-adjustable.",
-    "No hair washing service is provided. Please arrive with clean, dry hair. Shampoo or hair washing is not included."
-  ],
-  images: [
-    "/classic/classic1.jpg",
-    "/classic/classic2.jpg",
-    "/classic/classic3.jpg",
-    "/classic/classic4.jpg"
-  ]
-},
+    title: "Classic Bridal Package",
+    price: "₹16,500",
+    desc: "A timeless bridal look with traditional techniques, perfect for natural elegance and long ceremonies.",
+    includes: [
+      "Basic Bridal Makeup",
+      "Bridal hairstyling",
+      "Eyelashes",
+      "Coloured lenses",
+      "Outfit draping",
+      "Hair extensions (If needed)",
+    ],
+    notes: [
+      "Fresh flowers need to be carried by the client themselves.",
+      "Booking is non-refundable and non-adjustable.",
+      "No hair washing service is provided. Please arrive with clean, dry hair. Shampoo or hair washing is not included.",
+    ],
+    images: [
+      "/classic/classic1.jpg",
+      "/classic/classic2.jpg",
+      "/classic/classic3.jpg",
+      "/classic/classic4.jpg",
+    ],
+  },
   {
     title: "Signature Highly Defined (HD) Bridal Package",
     price: "₹22,500",
@@ -44,15 +44,10 @@ const bridalSections = [
       "Hair accessories (fresh flowers)",
     ],
     notes: [
-    "Booking is non-refundable and non-adjustable.",
-    "No hair washing service is provided. Please arrive with clean, dry hair. Shampoo or hair washing is not included."
-  ],
-    images: [
-      "/hd/hd1.jpg",
-      "/hd/hd2.jpg",
-      "/hd/hd3.jpg",
-      "/hd/hd4.jpg",
+      "Booking is non-refundable and non-adjustable.",
+      "No hair washing service is provided. Please arrive with clean, dry hair. Shampoo or hair washing is not included.",
     ],
+    images: ["/hd/hd1.jpg", "/hd/hd2.jpg", "/hd/hd3.jpg", "/hd/hd4.jpg"],
     reverse: true,
   },
   {
@@ -69,9 +64,9 @@ const bridalSections = [
       "Hair accessories (fresh flowers)",
     ],
     notes: [
-    "Booking is non-refundable and non-adjustable.",
-    "No hair washing service is provided. Please arrive with clean, dry hair. Shampoo or hair washing is not included."
-  ],
+      "Booking is non-refundable and non-adjustable.",
+      "No hair washing service is provided. Please arrive with clean, dry hair. Shampoo or hair washing is not included.",
+    ],
     images: [
       "/airbrush/airbrush1.jpg",
       "/airbrush/airbrush2.jpg",
@@ -82,10 +77,9 @@ const bridalSections = [
 ];
 
 const container = {
-  hidden: {},
   show: {
     transition: {
-      delayChildren: 0.35,
+      delayChildren: 0.25,
       staggerChildren: 0.18,
     },
   },
@@ -106,148 +100,117 @@ const item = {
 export default function BridalPage() {
   const pageRef = useRef(null);
 
-  // EXISTING EFFECT (KEEP THIS)
+  // Keep existing page-visible effect
   useEffect(() => {
     requestAnimationFrame(() => {
       pageRef.current?.classList.add("page-visible");
     });
   }, []);
 
-  // 🔥 ADD THIS EFFECT (VERY IMPORTANT)
+  // Ensure body scroll is native (defensive)
   useEffect(() => {
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "auto";
-
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prev;
     };
   }, []);
 
-
-const openWhatsApp = (packageName, price) => {
-  const message = `
+  const openWhatsApp = (packageName, price) => {
+    const message = `
 Hello Divisha Makeovers,
 I am interested in your ${packageName}.
 
 Package Price: ${price}
 
 Please let me know availability and further details.
-  `;
-
-  const url =
-    "https://wa.me/916280879548?text=" + encodeURIComponent(message);
-
-  window.open(url, "_blank");
-};
-
-
-
+    `;
+    window.open("https://wa.me/916280879548?text=" + encodeURIComponent(message), "_blank");
+  };
 
   return (
-    <div className="relative text-white min-h-screen overflow-y-auto">
-
-
+    <div
+      id="scroll-container"
+      className="relative min-h-screen text-white overflow-x-hidden"
+      style={{ overflowAnchor: "none" }}
+    >
       <Navbar />
 
- <div
-  className="fixed inset-0 z-0"
-  style={{
-    backgroundImage: "url('/bridal-bg/bridalbg.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundColor: "#2a0f14",
-  }}
-/>
+      {/* Fixed background - promoted to its own layer */}
+      <motion.div
+        className="fixed inset-0 z-0 will-change-transform"
+        style={{
+          backgroundImage: "url('/bridal-bg/bridalbg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "#2a0f14",
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+        }}
+        initial={{ scale: 0.96, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1 }}
+      />
 
+      {/* Overlay layers (decorative, pointer-events-none) */}
+      <div className="fixed inset-0 z-10 bg-black/25 pointer-events-none" />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
+        }}
+      />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          background: "radial-gradient(700px at 20% 12%, rgba(255,215,230,0.20), rgba(0,0,0,0) 60%)",
+        }}
+      />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          background: "linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0) 40%)",
+        }}
+      />
 
-      <div className="fixed inset-0 z-10 bg-black/25" />
+      <div className="pink-glow top-[25%] left-[8%] hidden md:block pointer-events-none" />
+      <div className="pink-glow bottom-[12%] right-[6%] hidden md:block pointer-events-none" />
 
-
-<div
-  className="fixed inset-0 z-10 pointer-events-none"
-  style={{
-    background:
-      "radial-gradient(ellipse at center, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
-  }}
-/>
-
-<div
-  className="fixed inset-0 z-10 pointer-events-none"
-  style={{
-    background:
-      "radial-gradient(700px at 20% 12%, rgba(255,215,230,0.20), rgba(0,0,0,0) 60%)",
-  }}
-/>
-
-
-<div
-  className="fixed inset-0 z-10 pointer-events-none"
-  style={{
-    background:
-      "linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0) 40%)",
-  }}
-/>
-
-
-
-
-
-<div className="pink-glow top-[25%] left-[8%] hidden md:block" />
-<div className="pink-glow bottom-[12%] right-[6%] hidden md:block" />
-
-
-
-      {/* CONTENT */}
+      {/* Main content */}
       <motion.div
         ref={pageRef}
-        className="relative z-20 min-h-screen text-white px-6 md:px-10 pt-36 pb-20"
-
-
+        className="relative z-20 min-h-screen px-6 md:px-10 pt-36 pb-20"
         variants={container}
         initial="hidden"
         animate="show"
       >
         {/* HEADER */}
-        <motion.div variants={item} className="max-w-6xl mx-auto mb-32">
+        <motion.div variants={item} className="max-w-6xl mx-auto mb-32 text-white">
           <button
-  onClick={() => window.history.back()}
-  className="
-    inline-flex items-center gap-2
-    text-white/60 hover:text-white
-    mb-8 transition
-    tracking-widest text-xs uppercase
-  "
->
-  ← Back
-</button>
+            onClick={() => window.history.back()}
+            className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition tracking-widest text-xs uppercase"
+          >
+            ← Back
+          </button>
 
+          <h1 className="text-5xl mb-4 tracking-wide leading-[1.1] text-white/95">Bridal Makeup</h1>
 
-        <h1 className="text-5xl mb-4 tracking-wide leading-[1.1] text-white/95">
-  Bridal Makeup
-</h1>
-
-  
-         <p className="text-white/70 leading-relaxed max-w-[90%]">
-
-            Timeless, elegant bridal looks crafted to enhance your natural beauty
-            and make you feel confident on your most special day.
+          <p className="text-white/70 leading-relaxed max-w-[90%]">
+            Timeless, elegant bridal looks crafted to enhance your natural beauty and make you feel confident on
+            your most special day.
           </p>
         </motion.div>
 
         {/* SECTIONS */}
         {bridalSections.map((section, idx) => (
-          <motion.section
-            key={idx}
-            variants={item}
-            className="max-w-7xl mx-auto mb-44"
-          >
+          <motion.section key={idx} variants={item} className="max-w-7xl mx-auto mb-44">
             <div className="grid gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
               {/* IMAGES */}
               <div
                 className={`${
-                  section.reverse
-                    ? "lg:order-2 max-w-[900px]"
-                    : "lg:order-1 max-w-[700px]"
+                  section.reverse ? "lg:order-2 max-w-[900px]" : "lg:order-1 max-w-[700px]"
                 } w-full`}
               >
                 <div className="grid grid-cols-2 gap-4">
@@ -255,17 +218,15 @@ Please let me know availability and further details.
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.03 }}
-                                        transition={{
-                      duration: 0.75,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-
-                      className="aspect-[3/4] max-h-[620px] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.35)]"
+                      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                      className="aspect-[3/4] max-h-[620px] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] will-change-transform"
                     >
                       <img
                         src={img}
                         alt={section.title}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </motion.div>
                   ))}
@@ -274,23 +235,9 @@ Please let me know availability and further details.
 
               {/* TEXT */}
               <div
-                className={`
-                  ${section.reverse ? "lg:order-1" : "lg:order-2"}
-
-                  ${
-                    section.title === "Signature Highly Defined (HD) Bridal Package"
-                      ? "relative rounded-3xl bg-black/28 backdrop-blur-[18px] p-10 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_40px_120px_rgba(0,0,0,0.65)]"
-
-                      : ""
-                  }
-
-                  ${
-                    section.title === "Airbrush Bridal"
-                      ? "relative rounded-[2.5rem] bg-black/26 backdrop-blur-[20px] p-12 border border-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_45px_130px_rgba(0,0,0,0.7)]"
-
-                      : ""
-                  }
-                `}
+                className={`${
+                  section.reverse ? "lg:order-1" : "lg:order-2"
+                } relative rounded-3xl bg-black/28 backdrop-blur-lg p-10 border border-white/10`}
               >
                 {/* BADGES */}
                 {section.title === "Signature Highly Defined (HD) Bridal Package" && (
@@ -318,14 +265,11 @@ Please let me know availability and further details.
                   {section.title}
                 </h2>
 
-                <p className="text-white/70 leading-relaxed mb-6">
-                  {section.desc}
-                </p>
+                <p className="text-white/70 leading-relaxed mb-6">{section.desc}</p>
 
                 {section.title === "Airbrush Bridal" && (
                   <p className="text-white/60 italic text-sm mb-6">
-                    Designed for brides who desire the finest and most exclusive
-                    bridal experience.
+                    Designed for brides who desire the finest and most exclusive bridal experience.
                   </p>
                 )}
 
@@ -338,66 +282,46 @@ Please let me know availability and further details.
                       </li>
                     ))}
                   </ul>
-
-
-
-
-
                 )}
 
-
                 {/* NOTES */}
-{section.notes && (
-  <div className="mt-8 p-5 text-bold rounded-2xl bg-white/15 border border-white/10">
-    <h4 className="text-xs text-bold tracking-widest uppercase text-white/60 mb-3">
-      Important Notes
-    </h4>
+                {section.notes && (
+                  <div className="mt-8 p-5 rounded-2xl bg-white/10 border border-white/10">
+                    <h4 className="text-xs tracking-widest uppercase text-white/60 mb-3">Important Notes</h4>
 
-    <ul className="space-y-2 text-white/60 text-sm">
-      {section.notes.map((note, i) => (
-        <li key={i} className="flex gap-3">
-          <span className="text-pink-400">•</span>
-          <span>{note}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+                    <ul className="space-y-2 text-white/60 text-sm">
+                      {section.notes.map((note, i) => (
+                        <li key={i} className="flex gap-3">
+                          <span className="text-pink-400">•</span>
+                          <span>{note}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-
-                {/* PRICE */}
+                {/* PRICE BLOCKS */}
                 {section.title === "Signature Highly Defined (HD) Bridal Package" ? (
                   <div className="flex flex-wrap items-center gap-4 mb-8">
-                    <p className="text-[#FF5CA8] text-3xl font-medium">
-                      {section.price}
-                    </p>
+                    <p className="text-[#FF5CA8] text-3xl font-medium">{section.price}</p>
 
-                    <div className="px-5 py-3 rounded-2xl bg-white/95 border border-[#FF7BBF] shadow-[0_6px_22px_rgba(255,92,168,0.25)] text-[#C2185B] text-[13px] font-semibold tracking-wide leading-tight">
-                      <span className="block font-bold">
-                        FREE Bridal Nail Extensions ✨
-                      </span>
-                      <span className="block font-bold mt-2">
-                        FREE Basic Party Makeup ✨
-                      </span>
+                    <div className="px-5 py-3 rounded-2xl bg-white/95 border border-[#FF7BBF] shadow-[0_6px_22px_rgba(255,92,168,0.12)] text-[#C2185B] text-[13px] font-semibold tracking-wide leading-tight">
+                      <span className="block font-bold">FREE Bridal Nail Extensions ✨</span>
+                      <span className="block font-bold mt-2">FREE Basic Party Makeup ✨</span>
                     </div>
                   </div>
                 ) : section.title === "Airbrush Bridal" ? (
-                  <p className="text-[#E6C87A] text-4xl font-medium mb-8">
-                    {section.price}
-                  </p>
+                  <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
                 ) : (
-                  <p className="text-pink-400 text-3xl mb-8">
-                    {section.price}
-                  </p>
+                  <p className="text-pink-400 text-3xl mb-8">{section.price}</p>
                 )}
 
                 <button
-  onClick={() => openWhatsApp(section.title, section.price)}
-  className="inline-block bg-pink-500 px-8 py-3 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
->
-  Book Now
-</button>
-
+                  onClick={() => openWhatsApp(section.title, section.price)}
+                  className="inline-block bg-pink-500 px-8 py-3 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
+                >
+                  Book Now
+                </button>
               </div>
             </div>
           </motion.section>
@@ -405,37 +329,30 @@ Please let me know availability and further details.
 
         {/* FINAL CTA */}
         <motion.div variants={item} className="text-center">
-          <h2 className="text-3xl mb-6 tracking-wide">
-            Book Your Bridal Look
-          </h2>
+          <h2 className="text-3xl mb-6 tracking-wide">Book Your Bridal Look</h2>
 
           <button
-  onClick={() =>
-    openWhatsApp("Bridal Makeup Enquiry", "Discuss Packages")
-  }
-  className="inline-block bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
->
-  Book on WhatsApp
-</button>
-
+            onClick={() => openWhatsApp("Bridal Makeup Enquiry", "Discuss Packages")}
+            className="inline-block bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
+          >
+            Book on WhatsApp
+          </button>
         </motion.div>
       </motion.div>
+
       {/* TRANSITION TO FOOTER */}
-<div className="relative z-20 h-40 bg-gradient-to-b from-transparent to-[#0b0b0c]" />
+      <div className="relative z-20 h-40 bg-gradient-to-b from-transparent to-[#0b0b0c]" />
 
-{/* ================= FOOTER ================= */}
-<motion.footer
-  initial={{ opacity: 0, y: 60 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-  viewport={{ once: true }}
-  className="relative z-20"
->
-  <ClosingEditorial />
-</motion.footer>
-
-
-
+      {/* FOOTER */}
+      <motion.footer
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true }}
+        className="relative z-20"
+      >
+        <ClosingEditorial />
+      </motion.footer>
     </div>
   );
-} 
+}

@@ -19,7 +19,6 @@ const nailImages = [
 
 /* FRAMER VARIANTS */
 const container = {
-  hidden: {},
   show: {
     transition: {
       delayChildren: 0.25,
@@ -51,11 +50,12 @@ export default function NailsExtensionsPage() {
     });
   }, []);
 
-  /* BODY OVERFLOW FIX */
+  /* BODY OVERFLOW FIX (defensive) */
   useEffect(() => {
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "auto";
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prev;
     };
   }, []);
 
@@ -75,31 +75,47 @@ Please share details, availability, and nail design options.`;
   };
 
   return (
-    <div className="relative min-h-screen text-white overflow-x-hidden">
-
+    <div
+      id="scroll-container"
+      className="relative min-h-screen text-white overflow-x-hidden"
+      style={{ overflowAnchor: "none" }}
+    >
       {/* NAVBAR */}
       <Navbar />
 
-      {/* FIXED BACKGROUND */}
+      {/* FIXED BACKGROUND (GPU promoted) */}
       <div
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 z-0 will-change-transform"
         style={{
           backgroundImage: "url('/nails-bg/nailsbg.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundColor: "#1a0b12",
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
         }}
       />
 
       {/* DEPTH + CONTRAST */}
-      <div className="fixed inset-0 z-10 bg-gradient-to-b from-black/60 via-black/25 to-black/70" />
+      <div className="fixed inset-0 z-10 bg-gradient-to-b from-black/60 via-black/25 to-black/70 pointer-events-none" />
 
       {/* SOFT PINK AMBIENT GLOW */}
-      <div className="fixed inset-0 z-10 bg-[radial-gradient(ellipse_at_top,rgba(236,72,153,0.18),transparent_60%)]" />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none will-change-transform"
+        style={{
+          background:
+            "radial-gradient(ellipse at top, rgba(236,72,153,0.18), transparent 60%)",
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+        }}
+      />
 
       {/* EDGE VIGNETTE */}
-      <div className="fixed inset-0 z-10 pointer-events-none shadow-[inset_0_0_180px_rgba(0,0,0,0.85)]" />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{ boxShadow: "inset 0 0 180px rgba(0,0,0,0.85)" }}
+      />
 
       {/* CONTENT */}
       <motion.main
@@ -110,7 +126,6 @@ Please share details, availability, and nail design options.`;
         animate="show"
       >
         <div className="px-6 md:px-10">
-
           {/* HEADER */}
           <motion.div variants={item} className="max-w-6xl mx-auto mb-20">
             <button
@@ -120,9 +135,7 @@ Please share details, availability, and nail design options.`;
               ← Back
             </button>
 
-            <h1 className="text-4xl md:text-5xl mb-4 tracking-wide">
-              Nail Extensions
-            </h1>
+            <h1 className="text-4xl md:text-5xl mb-4 tracking-wide">Nail Extensions</h1>
 
             <p className="text-white/70 max-w-2xl leading-relaxed">
               Premium nail extensions and luxury nail art designed to elevate your
@@ -140,13 +153,14 @@ Please share details, availability, and nail design options.`;
                 key={index}
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
+                className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.55)] will-change-transform"
               >
+                {/* next/image is used — priority for first two, others lazy by default */}
                 <Image
                   src={src}
                   alt="Nail Extension Design"
-                  width={500}
-                  height={280}
+                  width={1200}
+                  height={672}
                   className="w-full h-[280px] object-cover"
                   priority={index < 2}
                 />
@@ -187,20 +201,15 @@ Please share details, availability, and nail design options.`;
 
           {/* CTA */}
           <motion.div variants={item} className="max-w-6xl mx-auto text-center">
-            <h2 className="text-3xl mb-6 tracking-wide">
-              Book Your Nail Appointment
-            </h2>
+            <h2 className="text-3xl mb-6 tracking-wide">Book Your Nail Appointment</h2>
 
             <button
-              onClick={() =>
-                openWhatsApp("Nail Extensions Appointment", "Discuss Packages")
-              }
+              onClick={() => openWhatsApp("Nail Extensions Appointment", "Discuss Packages")}
               className="bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
             >
               Book on WhatsApp
             </button>
           </motion.div>
-
         </div>
       </motion.main>
 
@@ -217,7 +226,6 @@ Please share details, availability, and nail design options.`;
       >
         <ClosingEditorial />
       </motion.footer>
-
     </div>
   );
 }
