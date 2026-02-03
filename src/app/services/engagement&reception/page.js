@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -13,7 +13,7 @@ const engagementSections = [
     title: "Signature High Definition (HD) Engagement/Reception Makeup Package",
     price: "₹10,500",
     isBestSeller: true,
-    desc: "Our Signature High Definition Engagement/Reception Makeup is designed to help you look radiant and picture-perfect on your special day. This look is curated after understanding the bride’s personal preferences and style. Only premium international brands are used to deliver a flawless, long-lasting, and camera-ready finish with advanced and modern hairstyling techniques. Brands include NARS, Tarte, HUDA BEAUTY, Estée Lauder, Laura Mercier, and Charlotte Tilbury for a luxurious HD glow.",
+    desc: "Our Signature High Definition Engagement/Reception Makeup is designed to help you look radiant and picture-perfect on your special day. This look is curated after understanding the bride's personal preferences and style. Only premium international brands are used to deliver a flawless, long-lasting, and camera-ready finish with advanced and modern hairstyling techniques. Brands include NARS, Tarte, HUDA BEAUTY, Estee Lauder, Laura Mercier, and Charlotte Tilbury for a luxurious HD glow.",
     includes: [
       "Waterproof HD base makeup",
       "Advanced & international hairstyling",
@@ -78,14 +78,12 @@ export default function EngagementPage() {
   }, []);
 
   const openWhatsApp = (packageName, price) => {
-    const message = `
-Hello Divisha Makeovers,
+    const message = `Hello Divisha Makeovers,
 I am interested in your ${packageName}.
 
 Package Price: ${price}
 
-Please share availability and further details.
-    `;
+Please share availability and further details.`;
     window.open(
       "https://wa.me/916280879548?text=" + encodeURIComponent(message),
       "_blank"
@@ -125,7 +123,7 @@ Please share availability and further details.
       <div className="pink-glow bottom-[10%] right-[5%] hidden md:block pointer-events-none" />
 
       {/* ===== CONTENT ===== */}
-      <div ref={pageRef} className="relative z-20">
+      <div ref={pageRef} className="page-hidden relative z-20">
 
         {/* HERO */}
         <section className="pt-36 pb-14 px-5">
@@ -134,7 +132,7 @@ Please share availability and further details.
               onClick={() => window.history.back()}
               className="text-white/60 hover:text-white mb-8 tracking-widest text-xs uppercase"
             >
-              ← Back
+              &larr; Back
             </button>
 
             <h1 className="text-5xl mb-4 leading-[1.1]">
@@ -192,7 +190,7 @@ Please share availability and further details.
                 >
                   {section.isBestSeller && (
                     <div className="mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs uppercase w-fit">
-                      ★ Best Seller
+                      Best Seller
                     </div>
                   )}
 
@@ -213,8 +211,8 @@ Please share availability and further details.
                   <ul className="space-y-2 mb-8 text-sm text-white/75">
                     {section.includes.map((p, i) => (
                       <li key={i} className="flex gap-3">
-                        <span className="text-pink-400">•</span>
-                        {p}
+                        <span className="text-pink-400">*</span>
+                        <span>{p}</span>
                       </li>
                     ))}
                   </ul>
@@ -225,7 +223,9 @@ Please share availability and further details.
                         Important Note
                       </h4>
                       {section.notes.map((n, i) => (
-                        <p key={i} className="text-sm text-white/60">• {n}</p>
+                        <p key={i} className="text-sm text-white/60">
+                          * {n}
+                        </p>
                       ))}
                     </div>
                   )}
@@ -253,3 +253,6 @@ Please share availability and further details.
     </div>
   );
 }
+
+
+

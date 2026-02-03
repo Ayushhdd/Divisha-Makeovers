@@ -9,7 +9,7 @@ import ClosingEditorial from "@/app/components/ClosingEditorial";
 const bridalSections = [
   {
     title: "Classic Bridal Package",
-    price: "₹16,500",
+    price: "₹ 16,500",
     desc: "A timeless bridal look with traditional techniques, perfect for natural elegance and long ceremonies.",
     includes: [
       "Basic Bridal Makeup",
@@ -33,8 +33,8 @@ const bridalSections = [
   },
   {
     title: "Signature Highly Defined (HD) Bridal Package",
-    price: "₹22,500",
-    desc: "Our Signature High Definition Bridal Makeup is designed to help you look radiant and picture-perfect on your special day. This look is curated after understanding the bride’s personal preferences and style. Only premium international brands are used to deliver a flawless, long-lasting, and camera-ready finish with advanced and modern hairstyling techniques. Brands include NARS, Tarte, HUDA BEAUTY, Estée Lauder, Laura Mercier, and Charlotte Tilbury for a luxurious HD glow.",
+    price: "₹ 22,500",
+    desc: "Our Signature High Definition Bridal Makeup is designed to help you look radiant and picture-perfect on your special day. This look is curated after understanding the bride's personal preferences and style. Only premium international brands are used to deliver a flawless, long-lasting, and camera-ready finish with advanced and modern hairstyling techniques. Brands include NARS, Tarte, HUDA BEAUTY, Estee Lauder, Laura Mercier, and Charlotte Tilbury for a luxurious HD glow.",
     includes: [
       "Waterproof base makeup",
       "Advanced & international hairstyling",
@@ -53,7 +53,7 @@ const bridalSections = [
   },
   {
     title: "Airbrush Bridal",
-    price: "₹28,500",
+    price: "₹ 28,500",
     desc: "Silicon Base / Silk Makeup is designed to give you a super-natural, flawless, and skin-like finish. This signature makeover uses advanced airbrush base techniques that blend seamlessly into the skin, creating a lightweight yet long-lasting effect. The look enhances your natural features while ensuring a smooth, radiant complexion that stays fresh and camera-ready throughout your special occasion.",
     includes: [
       "Silicon Base makeup",
@@ -118,14 +118,12 @@ export default function BridalPage() {
   }, []);
 
   const openWhatsApp = (packageName, price) => {
-    const message = `
-Hello Divisha Makeovers,
+    const message = `Hello Divisha Makeovers,
 I am interested in your ${packageName}.
 
 Package Price: ${price}
 
-Please let me know availability and further details.
-    `;
+Please let me know availability and further details.`;
     window.open("https://wa.me/916280879548?text=" + encodeURIComponent(message), "_blank");
   };
 
@@ -182,7 +180,7 @@ Please let me know availability and further details.
       {/* Main content */}
       <motion.div
         ref={pageRef}
-        className="relative z-20 min-h-screen px-6 md:px-10 pt-36 pb-20"
+        className="page-hidden relative z-20 min-h-screen px-6 md:px-10 pt-36 pb-20"
         variants={container}
         initial="hidden"
         animate="show"
@@ -193,7 +191,7 @@ Please let me know availability and further details.
             onClick={() => window.history.back()}
             className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition tracking-widest text-xs uppercase"
           >
-            ← Back
+            &larr; Back
           </button>
 
           <h1 className="text-5xl mb-4 tracking-wide leading-[1.1] text-white/95">Bridal Makeup</h1>
@@ -241,7 +239,7 @@ Please let me know availability and further details.
                 {/* BADGES */}
                 {section.title === "Signature Highly Defined (HD) Bridal Package" && (
                   <div className="inline-block mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs tracking-widest uppercase font-semibold">
-                    ★ Best Seller
+                    Best Seller
                   </div>
                 )}
 
@@ -275,7 +273,7 @@ Please let me know availability and further details.
                   <ul className="space-y-2 mb-8 text-white/75 text-sm">
                     {section.includes.map((point, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <span className="text-pink-400">•</span>
+                        <span className="text-pink-400">*</span>
                         <span>{point}</span>
                       </li>
                     ))}
@@ -290,7 +288,7 @@ Please let me know availability and further details.
                     <ul className="space-y-2 text-white/60 text-sm">
                       {section.notes.map((note, i) => (
                         <li key={i} className="flex gap-3">
-                          <span className="text-pink-400">•</span>
+                          <span className="text-pink-400">*</span>
                           <span>{note}</span>
                         </li>
                       ))}
@@ -304,8 +302,8 @@ Please let me know availability and further details.
                     <p className="text-[#FF5CA8] text-3xl font-medium">{section.price}</p>
 
                     <div className="px-5 py-3 rounded-2xl bg-white/95 border border-[#FF7BBF] shadow-[0_6px_22px_rgba(255,92,168,0.12)] text-[#C2185B] text-[13px] font-semibold tracking-wide leading-tight">
-                      <span className="block font-bold">FREE Bridal Nail Extensions ✨</span>
-                      <span className="block font-bold mt-2">FREE Basic Party Makeup ✨</span>
+                      <span className="block font-bold">FREE Bridal Nail Extensions </span>
+                      <span className="block font-bold mt-2">FREE Basic Party Makeup </span>
                     </div>
                   </div>
                 ) : section.title === "Airbrush Bridal" ? (
@@ -354,3 +352,4 @@ Please let me know availability and further details.
     </div>
   );
 }
+

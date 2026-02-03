@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
@@ -9,14 +9,14 @@ import ClosingEditorial from "@/app/components/ClosingEditorial";
 const partySections = [
   {
     title: "Classic Party Makeup",
-    price: "₹2,500",
-    desc: "A clean and elegant party look designed to enhance your natural features with a soft, fresh finish—perfect for birthdays, family functions, and intimate gatherings.",
+    price: "₹ 2,500",
+    desc: "A clean and elegant party look designed to enhance your natural features with a soft, fresh finish--perfect for birthdays, family functions, and intimate gatherings.",
     includes: ["Basic Party Makeup", "Simple hairstyling"],
     images: ["/party/classic1.jpg", "/party/classic2.jpg", "/party/classic3.jpg", "/party/classic4.jpg"],
   },
   {
     title: "HD Party Makeup",
-    price: "₹3,500",
+    price: "₹ 3,500",
     desc: "Our HD Party Makeup delivers a radiant, camera-ready finish using high-quality products for a polished and long-lasting look.",
     includes: [
       "Waterproof HD base makeup",
@@ -24,14 +24,14 @@ const partySections = [
       "Luxury eyelashes",
       "Highlight & contour",
       "Premium finishing products",
-      "Drapping of outfit",
+      "Draping of outfit",
     ],
     images: ["/party/hd-party.jpg", "/party/hd-party1.jpg", "/party/hd-party2.jpg", "/party/hd-party3.jpg"],
     isBestSeller: true,
   },
   {
     title: "Signature Party Makeup",
-    price: "₹4,500",
+    price: "₹ 4,500",
     desc: "Lightweight airbrush makeup that blends seamlessly into the skin for a flawless, smooth, and long-lasting party look.",
     includes: [
       "Airbrush / silicon base makeup",
@@ -51,7 +51,7 @@ const partySections = [
   },
   {
     title: "AirBrush Party Makeup",
-    price: "₹6,500",
+    price: "₹ 6,500",
     desc: "A red-carpet-inspired party look with bold elegance, luxury detailing, and flawless perfection.",
     includes: [
       "Premium luxury base makeup",
@@ -68,19 +68,28 @@ const partySections = [
 ];
 
 const container = {
-  show: { transition: { delayChildren: 0.28, staggerChildren: 0.16 } },
+  show: {
+    transition: {
+      delayChildren: 0.25,
+      staggerChildren: 0.18,
+    },
+  },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 26 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.9,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
 export default function PartyMakeupPage() {
   const pageRef = useRef(null);
-  const { scrollY } = useScroll();
-  const bgY = useTransform(scrollY, [0, 1400], [0, -90]); // subtle parallax
-
   useEffect(() => {
     requestAnimationFrame(() => {
       pageRef.current?.classList.add("page-visible");
@@ -97,14 +106,12 @@ export default function PartyMakeupPage() {
   }, []);
 
   const openWhatsApp = (packageName, price) => {
-    const message = `
-Hello Divisha Makeovers,
+    const message = `Hello Divisha Makeovers,
 I am interested in your ${packageName}.
 
 Package Price: ${price}
 
-Please let me know availability and details.
-    `;
+Please let me know availability and details.`;
     window.open("https://wa.me/916280879548?text=" + encodeURIComponent(message), "_blank");
   };
 
@@ -116,11 +123,10 @@ Please let me know availability and details.
     >
       <Navbar />
 
-      {/* CINEMATIC PARALLAX BACKGROUND (GPU promoted) */}
+      {/* Fixed background - promoted to its own layer */}
       <motion.div
         className="fixed inset-0 z-0"
         style={{
-          y: bgY,
           backgroundImage: "url('/party-bg/partybg1.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -129,47 +135,56 @@ Please let me know availability and details.
           transform: "translateZ(0)",
           backfaceVisibility: "hidden",
         }}
-        initial={{ opacity: 0, scale: 1.06 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ scale: 0.96, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1 }}
       />
 
-      {/* LUXURY DEPTH OVERLAYS (decorative, pointer-events-none) */}
-      <div className="fixed inset-0 z-10 pointer-events-none bg-black/10" />
+      {/* Overlay layers (decorative, pointer-events-none) */}
+      <div className="fixed inset-0 z-10 bg-black/25 pointer-events-none" />
       <div
         className="fixed inset-0 z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.38) 65%, rgba(0,0,0,0.75) 100%)",
+            "radial-gradient(ellipse at center, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
         }}
       />
       <div
         className="fixed inset-0 z-10 pointer-events-none"
         style={{
-          background: "radial-gradient(650px at 70% 18%, rgba(236,72,153,0.18), rgba(0,0,0,0) 60%)",
+          background: "radial-gradient(700px at 20% 12%, rgba(255,215,230,0.20), rgba(0,0,0,0) 60%)",
         }}
       />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          background: "linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0) 40%)",
+        }}
+      />
+
+      <div className="pink-glow top-[25%] left-[8%] hidden md:block pointer-events-none" />
+      <div className="pink-glow bottom-[12%] right-[6%] hidden md:block pointer-events-none" />
 
       {/* MAIN CONTENT */}
       <motion.div
         ref={pageRef}
-        className="relative z-20 min-h-screen px-6 md:px-10 pt-36 pb-20"
+        className="page-hidden relative z-20 min-h-screen px-6 md:px-10 pt-36 pb-20"
         variants={container}
-        initial="show"
+        initial="hidden"
         animate="show"
       >
         {/* HEADER */}
-        <motion.div variants={item} className="max-w-6xl mx-auto mb-32">
+        <motion.div variants={item} className="max-w-6xl mx-auto mb-32 text-white">
           <button
             onClick={() => window.history.back()}
             className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition tracking-widest text-xs uppercase"
           >
-            ← Back
+            &larr; Back
           </button>
 
-          <h1 className="text-5xl mb-4 tracking-wide font-light">Party Makeup</h1>
+          <h1 className="text-5xl mb-4 tracking-wide leading-[1.1] text-white/95">Party Makeup</h1>
 
-          <p className="text-white/70 max-w-2xl leading-relaxed">
+          <p className="text-white/70 leading-relaxed max-w-[90%]">
             Glamorous and elegant party makeup looks crafted to make you stand out effortlessly at every celebration.
           </p>
         </motion.div>
@@ -180,16 +195,18 @@ Please let me know availability and details.
 
           return (
             <motion.section key={idx} variants={item} className="max-w-7xl mx-auto mb-44">
-              <div className="grid gap-20 items-center lg:grid-cols-2">
+              <div className="grid gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
                 {/* IMAGES */}
-                <div className={imageLeft ? "lg:order-1" : "lg:order-2"}>
-                  <div className="grid grid-cols-2 gap-7">
+                <div
+                  className={`${imageLeft ? "lg:order-1 max-w-[700px]" : "lg:order-2 max-w-[900px]"} w-full`}
+                >
+                  <div className="grid grid-cols-2 gap-4">
                     {section.images.map((img, i) => (
                       <motion.div
                         key={i}
-                        whileHover={{ scale: 1.04 }}
-                        transition={{ duration: 0.45 }}
-                        className="aspect-[3/4] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] relative"
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                        className="aspect-[3/4] max-h-[620px] overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.25)] relative"
                       >
                         <Image
                           src={img}
@@ -203,45 +220,49 @@ Please let me know availability and details.
                   </div>
                 </div>
 
-                {/* GLASS TEXT CARD */}
+                {/* TEXT */}
                 <div
-                  className={`self-center w-full max-w-[720px] rounded-[2rem] p-10 backdrop-blur-md border shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_30px_80px_rgba(0,0,0,0.5)]
-                  ${imageLeft ? "lg:order-2" : "lg:order-1"}
-                  ${section.isLuxury
-                      ? "bg-black/55 border-white/20"
-                      : section.isBestSeller
-                        ? "bg-black/42 border-white/15"
-                        : "bg-black/32 border-white/10"
-                    }`}
+                  className={`${imageLeft ? "lg:order-2" : "lg:order-1"} relative rounded-3xl bg-black/60 backdrop-blur-md p-10 border border-white/10`}
                 >
                   {section.isBestSeller && (
                     <div className="inline-block mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs tracking-widest uppercase font-semibold">
-                      ★ Best Seller
+                      Best Seller
                     </div>
                   )}
 
                   {section.isLuxury && (
                     <div className="inline-block mb-5 px-5 py-1.5 rounded-full bg-[#C9A24D]/20 border border-[#E6C87A] text-[#E6C87A] text-xs tracking-[0.3em] uppercase font-semibold">
-                      Luxury & Premium
+                      Luxury & Premium Package
                     </div>
                   )}
 
-                  <h2 className="mb-4 text-5xl tracking-[0.04em] font-light">{section.title}</h2>
+                  <h2
+                    className={`mb-4 tracking-wide ${section.isLuxury
+                        ? "text-6xl"
+                        : section.isBestSeller
+                          ? "text-5xl"
+                          : "text-4xl"
+                      }`}
+                  >
+                    {section.title}
+                  </h2>
 
                   <p className="text-white/70 leading-relaxed mb-6">{section.desc}</p>
 
                   <ul className="space-y-2 mb-8 text-white/75 text-sm">
                     {section.includes.map((point, i) => (
-                      <li key={i} className="flex gap-3">
-                        <span className="text-pink-400">•</span>
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="text-pink-400">*</span>
                         <span>{point}</span>
                       </li>
                     ))}
                   </ul>
 
-                  <p className={`mb-8 ${section.isLuxury ? "text-[#E6C87A] text-4xl" : "text-[#FF5CA8] text-3xl"}`}>
-                    {section.price}
-                  </p>
+                  {section.isLuxury ? (
+                    <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
+                  ) : (
+                    <p className="text-pink-400 text-3xl mb-8">{section.price}</p>
+                  )}
 
                   <button
                     onClick={() => openWhatsApp(section.title, section.price)}
@@ -257,7 +278,7 @@ Please let me know availability and details.
 
         {/* FINAL CTA */}
         <motion.div variants={item} className="text-center">
-          <h2 className="text-3xl mb-6 tracking-wide font-light">Book Your Party Look</h2>
+          <h2 className="text-3xl mb-6 tracking-wide">Book Your Party Look</h2>
 
           <button
             onClick={() => openWhatsApp("Party Makeup Enquiry", "Discuss Packages")}
@@ -275,7 +296,7 @@ Please let me know availability and details.
       <motion.footer
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
         viewport={{ once: true }}
         className="relative z-20"
       >
@@ -284,3 +305,4 @@ Please let me know availability and details.
     </div>
   );
 }
+

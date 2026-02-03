@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -7,7 +7,7 @@ import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
 
-/* 👇 NAIL EXTENSION IMAGES */
+/* NAIL EXTENSION IMAGES */
 const nailImages = [
   "/nails/nails1.png",
   "/nails/nails2.png",
@@ -120,7 +120,7 @@ Please share details, availability, and nail design options.`;
       {/* CONTENT */}
       <motion.main
         ref={pageRef}
-        className="relative z-20 pt-36 pb-24 opacity-0 translate-y-6 transition-all duration-1000"
+        className="page-hidden relative z-20 pt-36 pb-24"
         variants={container}
         initial="hidden"
         animate="show"
@@ -132,7 +132,7 @@ Please share details, availability, and nail design options.`;
               onClick={() => router.back()}
               className="text-white/60 hover:text-white mb-6 transition tracking-widest text-xs uppercase"
             >
-              ← Back
+              &larr; Back
             </button>
 
             <h1 className="text-4xl md:text-5xl mb-4 tracking-wide">Nail Extensions</h1>
@@ -155,7 +155,7 @@ Please share details, availability, and nail design options.`;
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
               >
-                {/* next/image is used — priority for first two, others lazy by default */}
+                {/* next/image is used -- priority for first two, others lazy by default */}
                 <Image
                   src={src}
                   alt="Nail Extension Design"
@@ -229,3 +229,7 @@ Please share details, availability, and nail design options.`;
     </div>
   );
 }
+
+
+
+

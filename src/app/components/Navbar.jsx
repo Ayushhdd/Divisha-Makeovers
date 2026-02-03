@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,7 +21,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
   const [lockNav, setLockNav] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -37,15 +37,17 @@ export default function Navbar() {
   useEffect(() => {
     if (isMobile || lockNav) return;
 
+    const scrollTarget = document.getElementById("scroll-container") || window;
+
     const handleScroll = () => {
-      const y = window.scrollY;
-      setHidden(y > lastScrollY && y > 80);
-      setLastScrollY(y);
+      const y = scrollTarget === window ? window.scrollY : scrollTarget.scrollTop;
+      setHidden(y > lastScrollY.current && y > 80);
+      lastScrollY.current = y;
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, lockNav, isMobile]);
+    scrollTarget.addEventListener("scroll", handleScroll, { passive: true });
+    return () => scrollTarget.removeEventListener("scroll", handleScroll);
+  }, [lockNav, isMobile]);
 
   /* LOCK BODY SCROLL ON MOBILE MENU */
   useEffect(() => {

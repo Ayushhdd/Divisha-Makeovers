@@ -15,19 +15,15 @@ body {
   overscroll-behavior-x: none;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter);
+  font-family: var(--font-inter), sans-serif;
   line-height: 1.9;
+  position: relative;
 }
 
 /* ================= FONTS ================= */
 
-:root {
-  --font-playfair: serif;
-  --font-inter: sans-serif;
-}
-
 h1, h2, h3 {
-  font-family: var(--font-playfair);
+  font-family: var(--font-playfair), serif;
 }
 
 h2 {
@@ -39,12 +35,22 @@ h2 {
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --section-bg: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.06),
+    rgba(0, 0, 0, 0.12)
+  );
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --section-bg: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.12),
+      rgba(0, 0, 0, 0.22)
+    );
   }
 }
 
@@ -66,11 +72,7 @@ h2 {
 
 /* Section blending */
 .section-bg {
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.12),
-    rgba(0, 0, 0, 0.22)
-  );
+  background: var(--section-bg);
 }
 
 /* ================= PAGE TRANSITIONS ================= */
@@ -88,6 +90,15 @@ h2 {
     transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .page-hidden,
+  .page-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* ================= GLOBAL GLASS ================= */
 
 body::before {
@@ -96,7 +107,12 @@ body::before {
   inset: 0;
   backdrop-filter: contrast(1.08) saturate(1.15);
   pointer-events: none;
-  z-index: 5;
+  z-index: 0;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ================= MOBILE TYPOGRAPHY ================= */
