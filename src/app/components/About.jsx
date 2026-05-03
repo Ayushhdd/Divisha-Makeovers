@@ -2,17 +2,20 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useState } from "react";
 
 
 export default function About() {
+  const [showFullAbout, setShowFullAbout] = useState(false);
+
   return (
     <section
       id="about"
       className="relative py-14 sm:py-20 md:py-[7.5rem] text-white overflow-hidden"
     >
       {/* SUBTLE AMBIENT BLOOMS */}
-      <div className="absolute -top-40 left-1/3 w-[700px] h-[700px] bg-[#e7b6c3]/20 blur-[180px] md:blur-[220px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#b76e79]/18 blur-[200px] rounded-full pointer-events-none"></div>
+      <div className="absolute -top-40 left-1/3 w-[700px] h-[700px] bg-[#e7b6c3]/20 blur-[180px] md:blur-[220px] rounded-full pointer-events-none hidden md:block"></div>
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#b76e79]/18 blur-[200px] rounded-full pointer-events-none hidden md:block"></div>
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -28,11 +31,11 @@ pt-6 pb-0 sm:py-14 md:py-20
           rounded-[2.5rem] md:rounded-[3rem]
 
           bg-[#5a3a3a]/65
-          backdrop-blur-[16px]
+          backdrop-blur-[8px] md:backdrop-blur-[16px]
           backdrop-saturate-[160%]
           border border-white/10
 
-          shadow-[0_60px_180px_rgba(30,10,10,0.55)]
+          shadow-[0_28px_80px_rgba(30,10,10,0.45)] md:shadow-[0_60px_180px_rgba(30,10,10,0.55)]
         "
       >
       {/* SOFT EDGE FADE — DESKTOP ONLY */}
@@ -51,7 +54,14 @@ pt-6 pb-0 sm:py-14 md:py-20
               About Divisha Makeovers
             </h2>
 
-            <div className="space-y-6 sm:space-y-8 text-white/95 leading-[1.55] sm:leading-[1.65] text-[0.95rem] sm:text-lg md:text-xl font-medium">
+            <div
+              className={`
+                relative space-y-6 sm:space-y-8 text-white/95 leading-[1.55] sm:leading-[1.65]
+                text-[0.95rem] sm:text-lg md:text-xl font-medium
+                ${showFullAbout ? "max-h-none" : "max-h-[430px] overflow-hidden"}
+                md:max-h-none md:overflow-visible
+              `}
+            >
               {/* DESCRIPTION — UNCHANGED */}
               <p>
                 Divisha is a{" "}
@@ -133,10 +143,22 @@ pt-6 pb-0 sm:py-14 md:py-20
                 </span>{" "}
                 to be a part of your journey and help create{" "}
                 <span className="text-[#f0d26d] font-semibold">
-                  memories that last a lifetime
+                memories that last a lifetime
                 </span>.
               </p>
+
+              {!showFullAbout && (
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#5a3a3a] to-transparent md:hidden" />
+              )}
             </div>
+
+            <button
+              type="button"
+              onClick={() => setShowFullAbout((value) => !value)}
+              className="mt-6 inline-flex md:hidden px-5 py-2 rounded-full border border-white/25 text-xs uppercase tracking-[0.24em] text-white/80"
+            >
+              {showFullAbout ? "Show Less" : "Read More"}
+            </button>
           </div>
 
    {/* IMAGES + STATS */}
@@ -149,8 +171,9 @@ pt-6 pb-0 sm:py-14 md:py-20
         alt="Divisha Bridal Makeup"
         width={560}
         height={560}
+        sizes="(max-width: 640px) 100vw, (max-width: 768px) 420px, 560px"
+        quality={86}
         className="w-full h-[240px] sm:h-[420px] md:w-[560px] md:h-[560px] sm:w-[420px] sm:h-[420px] md:w-[560px] md:h-[560px] object-cover contrast-[1.05] saturate-[1.05]"
-        priority
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
     </div>
@@ -162,6 +185,8 @@ pt-6 pb-0 sm:py-14 md:py-20
         alt="Divisha Bridal Makeup"
         width={560}
         height={560}
+        sizes="(max-width: 640px) 100vw, (max-width: 768px) 420px, 560px"
+        quality={86}
         className="w-full h-[240px] sm:h-[420px] md:w-[560px] md:h-[560px] sm:w-[420px] sm:h-[420px] md:w-[560px] md:h-[560px] object-cover contrast-[1.05] saturate-[1.05]"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
@@ -170,9 +195,9 @@ pt-6 pb-0 sm:py-14 md:py-20
     {/* STATS */}
     <div className="
       mt-6 sm:mt-12 md:mt-24
-      flex flex-wrap
+      grid grid-cols-2 md:flex
       justify-center md:justify-start
-      gap-6 sm:gap-8 md:gap-16
+      gap-3 sm:gap-8 md:gap-16
       text-[#f1e3b0]/95
     ">
       {[
@@ -181,14 +206,21 @@ pt-6 pb-0 sm:py-14 md:py-20
         ["100%", "Client Satisfaction"],
         ["50+", "Signature Looks"],
       ].map(([num, label]) => (
-        <div key={label} className="flex flex-col text-center md:text-left">
+        <motion.div
+          key={label}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55 }}
+          viewport={{ once: true }}
+          className="flex flex-col text-center md:text-left rounded-2xl md:rounded-none border border-white/10 md:border-0 bg-white/[0.04] md:bg-transparent px-3 py-4 md:p-0"
+        >
           <strong className="text-3xl sm:text-4xl md:text-5xl font-[Playfair_Display] tracking-wide">
             {num}
           </strong>
           <span className="mt-1 text-xs sm:text-sm italic text-[#e6d39a]/90">
             {label}
           </span>
-        </div>
+        </motion.div>
       ))}
     </div>
 

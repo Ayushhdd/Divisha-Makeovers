@@ -40,7 +40,7 @@ Event Details: ${formData.message}
 
 
   return (
-<section className="relative pt-16 pb-24 md:py-24 text-white overflow-hidden">
+<section className="relative pt-8 pb-12 md:py-24 text-white overflow-hidden">
 
       {/* Fade from testimonials */}
 <div className="absolute top-0 left-0 w-full h-16 sm:h-24 md:h-48 bg-gradient-to-b from-black to-transparent z-0"></div>
@@ -58,7 +58,7 @@ Event Details: ${formData.message}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
         >
          <h2 className="text-4xl mb-4 tracking-wide font-light">
   Book Your Appointment

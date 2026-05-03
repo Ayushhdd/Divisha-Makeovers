@@ -125,32 +125,37 @@ Please let me know availability and details.`;
 
       {/* Fixed background - promoted to its own layer */}
       <motion.div
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 z-0 overflow-hidden bg-[#14080c]"
         style={{
-          backgroundImage: "url('/party-bg/partybg1.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: "#14080c",
-          transform: "translateZ(0)",
+          transform: "translate3d(0,0,0)",
           backfaceVisibility: "hidden",
         }}
         initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1 }}
-      />
+      >
+        <Image
+          src="/party-bg/partybg1.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={78}
+          className="object-cover"
+        />
+      </motion.div>
 
       {/* Overlay layers (decorative, pointer-events-none) */}
       <div className="fixed inset-0 z-10 bg-black/25 pointer-events-none" />
       <div
-        className="fixed inset-0 z-10 pointer-events-none"
+        className="fixed inset-0 z-10 pointer-events-none hidden md:block"
         style={{
           background:
             "radial-gradient(ellipse at center, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
         }}
       />
       <div
-        className="fixed inset-0 z-10 pointer-events-none"
+        className="fixed inset-0 z-10 pointer-events-none hidden md:block"
         style={{
           background: "radial-gradient(700px at 20% 12%, rgba(255,215,230,0.20), rgba(0,0,0,0) 60%)",
         }}
@@ -168,13 +173,13 @@ Please let me know availability and details.`;
       {/* MAIN CONTENT */}
       <motion.div
         ref={pageRef}
-        className="page-hidden relative z-20 min-h-screen px-6 md:px-10 pt-36 pb-20"
+        className="page-hidden relative z-20 min-h-screen px-4 md:px-10 pt-32 md:pt-36 pb-16 md:pb-20"
         variants={container}
         initial="hidden"
         animate="show"
       >
         {/* HEADER */}
-        <motion.div variants={item} className="max-w-6xl mx-auto mb-32 text-white">
+        <motion.div variants={item} className="max-w-6xl mx-auto mb-20 md:mb-32 text-white">
           <button
             onClick={() => window.history.back()}
             className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition tracking-widest text-xs uppercase"
@@ -194,13 +199,13 @@ Please let me know availability and details.`;
           const imageLeft = idx % 2 === 0;
 
           return (
-            <motion.section key={idx} variants={item} className="max-w-7xl mx-auto mb-44">
-              <div className="grid gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
+            <motion.section key={idx} variants={item} className="max-w-7xl mx-auto mb-28 md:mb-44">
+              <div className="grid gap-10 md:gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
                 {/* IMAGES */}
                 <div
-                  className={`${imageLeft ? "lg:order-1 max-w-[700px]" : "lg:order-2 max-w-[900px]"} w-full`}
+                  className={`order-2 ${imageLeft ? "lg:order-1 max-w-[700px]" : "lg:order-2 max-w-[900px]"} w-full`}
                 >
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {section.images.map((img, i) => (
                       <motion.div
                         key={i}
@@ -212,7 +217,8 @@ Please let me know availability and details.`;
                           src={img}
                           alt={section.title}
                           fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 32vw, 480px"
+                          quality={90}
                           className="object-cover"
                         />
                       </motion.div>
@@ -222,7 +228,7 @@ Please let me know availability and details.`;
 
                 {/* TEXT */}
                 <div
-                  className={`${imageLeft ? "lg:order-2" : "lg:order-1"} relative rounded-3xl bg-black/60 backdrop-blur-md p-10 border border-white/10`}
+                  className={`order-1 ${imageLeft ? "lg:order-2" : "lg:order-1"} relative rounded-3xl bg-black/60 backdrop-blur-sm md:backdrop-blur-md p-6 md:p-10 border border-white/10`}
                 >
                   {section.isBestSeller && (
                     <div className="inline-block mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs tracking-widest uppercase font-semibold">
@@ -266,7 +272,7 @@ Please let me know availability and details.`;
 
                   <button
                     onClick={() => openWhatsApp(section.title, section.price)}
-                    className="inline-block bg-pink-500 px-8 py-3 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
+                    className="inline-block w-full sm:w-auto bg-pink-500 px-8 py-3 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
                   >
                     Book Now
                   </button>
@@ -282,7 +288,7 @@ Please let me know availability and details.`;
 
           <button
             onClick={() => openWhatsApp("Party Makeup Enquiry", "Discuss Packages")}
-            className="inline-block bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
+            className="inline-block w-full sm:w-auto bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
           >
             Book on WhatsApp
           </button>

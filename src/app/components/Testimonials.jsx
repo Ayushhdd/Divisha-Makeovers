@@ -44,6 +44,7 @@ const testimonials = [
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(null);
 
   const paginate = (newDirection) => {
     setDirection(newDirection);
@@ -53,14 +54,25 @@ export default function Testimonials() {
     );
   };
 
+  const handleTouchEnd = (event) => {
+    if (touchStartX === null) return;
+    const deltaX = touchStartX - event.changedTouches[0].clientX;
+    if (Math.abs(deltaX) > 45) {
+      paginate(deltaX > 0 ? 1 : -1);
+    }
+    setTouchStartX(null);
+  };
+
   return (
-<section className="relative pt-40 pb-24 md:py-44 text-white bg-black overflow-hidden">
+<section className="relative pt-24 pb-20 md:py-44 text-white bg-black overflow-hidden">
 
       <div className="max-w-6xl mx-auto px-6">
 
         {/* PINK FRAME */}
         <div
-          className="relative rounded-[3rem] px-6 py-14 sm:px-10 sm:py-20 md:px-16 md:py-24"
+          onTouchStart={(event) => setTouchStartX(event.touches[0].clientX)}
+          onTouchEnd={handleTouchEnd}
+          className="relative rounded-[2rem] md:rounded-[3rem] px-5 py-12 sm:px-10 sm:py-20 md:px-16 md:py-24"
           style={{
             border: "4px solid rgba(236,72,153,0.75)",
             boxShadow: "0 0 60px rgba(236,72,153,0.25)",
@@ -104,13 +116,13 @@ export default function Testimonials() {
           <div className="relative max-w-3xl mx-auto text-center">
 
             {/* SECTION TITLE */}
-            <h2 className="text-2xl md:text-3xl tracking-wider mb-20">
+            <h2 className="text-2xl md:text-3xl tracking-wider mb-12 md:mb-20">
               What Brides Say
             </h2>
 
             <AnimatePresence mode="wait" custom={direction}>
              <motion.div
-  className="mx-auto max-w-full sm:max-w-3xl pointer-events-none md:pointer-events-auto"
+  className="mx-auto max-w-full sm:max-w-3xl pointer-events-auto"
 
 
                 key={index}

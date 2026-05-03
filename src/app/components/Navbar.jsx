@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,7 +38,15 @@ export default function Navbar() {
   useEffect(() => {
     if (isMobile || lockNav) return;
 
-    const scrollTarget = document.getElementById("scroll-container") || window;
+    const scrollContainer = document.getElementById("scroll-container");
+    const overflowY = scrollContainer
+      ? window.getComputedStyle(scrollContainer).overflowY
+      : "";
+    const canUseScrollContainer =
+      scrollContainer &&
+      ["auto", "scroll"].includes(overflowY) &&
+      scrollContainer.scrollHeight > scrollContainer.clientHeight;
+    const scrollTarget = canUseScrollContainer ? scrollContainer : window;
 
     const handleScroll = () => {
       const y = scrollTarget === window ? window.scrollY : scrollTarget.scrollTop;
@@ -66,6 +75,13 @@ export default function Navbar() {
     }
   }, [mobileOpen]);
 
+  const handleLogoClick = (event) => {
+    if (!isHome) return;
+    event.preventDefault();
+    setMobileOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       {/* NAVBAR SPACER */}
@@ -83,10 +99,14 @@ export default function Navbar() {
         <div className="backdrop-blur-2xl bg-black/30 border-b border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
           <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
             {/* LOGO */}
-            <Link href="/">
-              <img
+            <Link href="/" onClick={handleLogoClick}>
+              <Image
                 src="/logo/dm2.png"
                 alt="Divisha Makeovers"
+                width={171}
+                height={60}
+                sizes="171px"
+                quality={90}
                 className="h-12 w-auto opacity-95 hover:opacity-100 transition"
               />
             </Link>
@@ -169,6 +189,7 @@ export default function Navbar() {
             {/* MOBILE BUTTON */}
             <button
               onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
               className="md:hidden w-10 h-10 rounded-full border border-white/30 flex items-center justify-center"
             >
               <span className="space-y-1.5">
@@ -201,8 +222,17 @@ export default function Navbar() {
               className="fixed top-0 right-0 h-full w-[85%] max-w-sm z-[100] px-6 py-6"
             >
               <div className="h-full rounded-3xl bg-black/60 backdrop-blur-2xl border border-white/15 px-6 py-8 overflow-y-auto">
-                <div className="flex justify-between mb-10">
+                <div className="flex justify-between mb-10 [&>button]:hidden">
                   <span className="text-xs tracking-[0.35em] uppercase text-white/40">Menu</span>
+                  <span>
+                    <button
+                      onClick={() => setMobileOpen(false)}
+                      aria-label="Close menu"
+                      className="w-10 h-10 rounded-full border border-white/20 text-sm text-white/80"
+                    >
+                      X
+                    </button>
+                  </span>
                   <button onClick={() => setMobileOpen(false)}>✕</button>
                 </div>
 

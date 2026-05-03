@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 
 
@@ -69,9 +70,7 @@ className="
           }}
           className="text-center"
         >
-          <motion.img
-            src="/logo/dm2.png"
-            alt="Divisha Makeovers Logo"
+          <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1.05 }}
             transition={{
@@ -79,7 +78,18 @@ className="
               ease: "easeOut",
             }}
             className="mx-auto mb-8 w-[180px] sm:w-[220px] md:w-[340px] opacity-90"
-          />
+          >
+            <Image
+              src="/logo/dm2.png"
+              alt="Divisha Makeovers Logo"
+              width={681}
+              height={239}
+              sizes="(max-width: 640px) 180px, (max-width: 768px) 220px, 340px"
+              priority
+              quality={90}
+              className="w-full h-auto"
+            />
+          </motion.div>
 
           <motion.p
             variants={{

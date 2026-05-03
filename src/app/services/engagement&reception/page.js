@@ -100,19 +100,25 @@ Please share availability and further details.`;
 
       {/* ===== FIXED BACKGROUND (GPU PROMOTED) ===== */}
       <motion.div
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 z-0 overflow-hidden bg-[#1b0b10]"
         style={{
-          backgroundImage: "url('/engagement-bg/engagementbg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          transform: "translateZ(0)",
+          transform: "translate3d(0,0,0)",
           backfaceVisibility: "hidden",
         }}
         initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1 }}
-      />
+      >
+        <Image
+          src="/engagement-bg/engagementbg.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={78}
+          className="object-cover"
+        />
+      </motion.div>
 
       {/* OVERLAYS */}
       <div className="fixed inset-0 z-10 bg-black/20 pointer-events-none" />
@@ -126,7 +132,7 @@ Please share availability and further details.`;
       <div ref={pageRef} className="page-hidden relative z-20">
 
         {/* HERO */}
-        <section className="pt-36 pb-14 px-5">
+        <section className="pt-32 md:pt-36 pb-12 md:pb-14 px-4 md:px-5">
           <div className="max-w-6xl mx-auto">
             <button
               onClick={() => window.history.back()}
@@ -152,19 +158,19 @@ Please share availability and further details.`;
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-120px" }}
-          className="px-4 pt-12 pb-12"
+          className="px-4 pt-10 md:pt-12 pb-12"
         >
           {engagementSections.map((section, idx) => (
             <motion.section
               key={idx}
               variants={item}
-              className="max-w-7xl mx-auto mb-44"
+              className="max-w-7xl mx-auto mb-28 md:mb-44"
             >
-              <div className="grid gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
+              <div className="grid gap-10 md:gap-16 items-center lg:grid-cols-[2.4fr_2.6fr]">
 
                 {/* IMAGES */}
-                <div className={section.reverse ? "lg:order-2" : "lg:order-1"}>
-                  <div className="grid grid-cols-2 gap-4">
+                <div className={`order-2 ${section.reverse ? "lg:order-2" : "lg:order-1"}`}>
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {section.images.map((img, i) => (
                       <motion.div
                         key={i}
@@ -175,7 +181,8 @@ Please share availability and further details.`;
                           src={img}
                           alt={section.title}
                           fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 28vw, 440px"
+                          quality={86}
                           className="object-cover"
                         />
                       </motion.div>
@@ -185,8 +192,8 @@ Please share availability and further details.`;
 
                 {/* TEXT */}
                 <div
-                  className={`${section.reverse ? "lg:order-1" : "lg:order-2"} 
-                  rounded-3xl bg-black/60 backdrop-blur-md p-10 border border-white/10`}
+                  className={`order-1 ${section.reverse ? "lg:order-1" : "lg:order-2"} 
+                  rounded-3xl bg-black/60 backdrop-blur-sm md:backdrop-blur-md p-6 md:p-10 border border-white/10`}
                 >
                   {section.isBestSeller && (
                     <div className="mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs uppercase w-fit">
@@ -218,7 +225,7 @@ Please share availability and further details.`;
                   </ul>
 
                   {section.notes && (
-                    <div className="mb-8 p-5 rounded-2xl bg-white/5 border border-white/10">
+                    <div className="mb-8 p-4 md:p-5 rounded-2xl bg-white/5 border border-white/10">
                       <h4 className="text-xs uppercase text-white/60 mb-3">
                         Important Note
                       </h4>
@@ -236,7 +243,7 @@ Please share availability and further details.`;
 
                   <button
                     onClick={() => openWhatsApp(section.title, section.price)}
-                    className="bg-pink-500 px-10 py-4 rounded-full tracking-[0.3em] uppercase text-sm hover:bg-pink-600 transition"
+                    className="w-full sm:w-auto bg-pink-500 px-10 py-4 rounded-full tracking-[0.3em] uppercase text-sm hover:bg-pink-600 transition"
                   >
                     Book Now
                   </button>

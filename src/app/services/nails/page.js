@@ -85,24 +85,29 @@ Please share details, availability, and nail design options.`;
 
       {/* FIXED BACKGROUND (GPU promoted) */}
       <div
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 z-0 overflow-hidden bg-[#1a0b12]"
         style={{
-          backgroundImage: "url('/nails-bg/nailsbg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: "#1a0b12",
           transform: "translateZ(0)",
           backfaceVisibility: "hidden",
         }}
-      />
+      >
+        <Image
+          src="/nails-bg/nailsbg.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={78}
+          className="object-cover"
+        />
+      </div>
 
       {/* DEPTH + CONTRAST */}
       <div className="fixed inset-0 z-10 bg-gradient-to-b from-black/60 via-black/25 to-black/70 pointer-events-none" />
 
       {/* SOFT PINK AMBIENT GLOW */}
       <div
-        className="fixed inset-0 z-10 pointer-events-none"
+        className="fixed inset-0 z-10 pointer-events-none hidden md:block"
         style={{
           background:
             "radial-gradient(ellipse at top, rgba(236,72,153,0.18), transparent 60%)",
@@ -113,21 +118,21 @@ Please share details, availability, and nail design options.`;
 
       {/* EDGE VIGNETTE */}
       <div
-        className="fixed inset-0 z-10 pointer-events-none"
+        className="fixed inset-0 z-10 pointer-events-none hidden md:block"
         style={{ boxShadow: "inset 0 0 180px rgba(0,0,0,0.85)" }}
       />
 
       {/* CONTENT */}
       <motion.main
         ref={pageRef}
-        className="page-hidden relative z-20 pt-36 pb-24"
+        className="page-hidden relative z-20 pt-32 md:pt-36 pb-20 md:pb-24"
         variants={container}
         initial="hidden"
         animate="show"
       >
-        <div className="px-6 md:px-10">
+        <div className="px-4 md:px-10">
           {/* HEADER */}
-          <motion.div variants={item} className="max-w-6xl mx-auto mb-20">
+          <motion.div variants={item} className="max-w-6xl mx-auto mb-16 md:mb-20">
             <button
               onClick={() => router.back()}
               className="text-white/60 hover:text-white mb-6 transition tracking-widest text-xs uppercase"
@@ -146,7 +151,7 @@ Please share details, availability, and nail design options.`;
           {/* GALLERY */}
           <motion.div
             variants={item}
-            className="max-w-6xl mx-auto mb-28 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+            className="max-w-6xl mx-auto mb-20 md:mb-28 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8"
           >
             {nailImages.map((src, index) => (
               <motion.div
@@ -161,7 +166,9 @@ Please share details, availability, and nail design options.`;
                   alt="Nail Extension Design"
                   width={1200}
                   height={672}
-                  className="w-full h-[280px] object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 420px"
+                  quality={90}
+                  className="w-full h-[170px] sm:h-[240px] md:h-[280px] object-cover"
                   priority={index < 2}
                 />
               </motion.div>
@@ -170,9 +177,9 @@ Please share details, availability, and nail design options.`;
 
           {/* PACKAGES */}
           <motion.div variants={item} className="max-w-6xl mx-auto mb-28">
-            <h2 className="text-3xl mb-10 tracking-wide">Nail Packages</h2>
+            <h2 className="text-3xl mb-8 md:mb-10 tracking-wide">Nail Packages</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
               {[
                 { title: "Temporary Nail Extension (including nail art)", price: "₹1,700" },
                 { title: "Gel/Acrylic Nail Extensions (including nail art)", price: "₹2,600" },
@@ -180,7 +187,7 @@ Please share details, availability, and nail design options.`;
               ].map((pkg, i) => (
                 <div
                   key={i}
-                  className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-[0_25px_70px_rgba(0,0,0,0.55)] flex flex-col"
+                  className="bg-white/5 backdrop-blur-sm md:backdrop-blur-md border border-white/20 rounded-2xl p-6 md:p-8 shadow-[0_18px_45px_rgba(0,0,0,0.45)] md:shadow-[0_25px_70px_rgba(0,0,0,0.55)] flex flex-col"
                 >
                   <div>
                     <h3 className="text-xl mb-2">{pkg.title}</h3>
@@ -190,7 +197,7 @@ Please share details, availability, and nail design options.`;
                   <button
                     aria-label={`Book ${pkg.title} via WhatsApp`}
                     onClick={() => openWhatsApp(pkg.title, pkg.price)}
-                    className="mt-auto bg-pink-500 px-6 py-3 rounded-full tracking-widest uppercase text-xs hover:bg-pink-600 transition-all duration-500"
+                    className="mt-auto w-full md:w-auto md:self-start bg-pink-500 px-6 py-3 rounded-full tracking-widest uppercase text-xs hover:bg-pink-600 transition-all duration-500"
                   >
                     Book Now
                   </button>
@@ -205,7 +212,7 @@ Please share details, availability, and nail design options.`;
 
             <button
               onClick={() => openWhatsApp("Nail Extensions Appointment", "Discuss Packages")}
-              className="bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
+              className="w-full sm:w-auto bg-pink-500 px-10 py-4 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
             >
               Book on WhatsApp
             </button>

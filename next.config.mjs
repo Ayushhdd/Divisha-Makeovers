@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  compress: true,
+  poweredByHeader: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920, 2560, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [60, 70, 75, 78, 82, 86, 88, 90, 92],
+    minimumCacheTTL: 31536000,
+  },
 };
 
 export default nextConfig;

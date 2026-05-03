@@ -5,18 +5,18 @@ import { Instagram, Facebook, MessageCircle, Mail, MapPin, Phone } from "lucide-
 
 export default function ClosingEditorial() {
   return (
-    <footer className="relative w-screen min-h-screen bg-[#0b0b0c] text-white pt-36 pb-4 overflow-hidden">
+    <footer className="relative w-full min-h-0 md:min-h-screen bg-[#0b0b0c] text-white pt-24 md:pt-36 pb-4 overflow-hidden">
 
       {/* Subtle background texture */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] via-transparent to-black pointer-events-none" />
 
       {/* CONTENT GRID */}
-      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-24">
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-24">
 
         {/* BRAND */}
         <div className="relative">
           <div className="absolute -inset-6 bg-pink-500/10 blur-3xl rounded-full pointer-events-none" />
-          <h2 className="relative text-2xl md:text-3xl tracking-[0.35em] font-medium mb-6 md:mb-8">
+          <h2 className="relative text-2xl md:text-3xl tracking-[0.24em] md:tracking-[0.35em] font-medium mb-6 md:mb-8">
             DIVISHA
           </h2>
           <p className="relative text-white/60 text-base leading-[2] max-w-sm">
@@ -151,7 +151,7 @@ export default function ClosingEditorial() {
       </div>
 
       {/* DIVIDER */}
-      <div className="mt-28 border-t border-white/10" />
+      <div className="mt-16 md:mt-28 border-t border-white/10" />
 
       {/* BOTTOM BAR */}
       <div className="max-w-[1300px] mx-auto px-6 md:px-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-white/45">

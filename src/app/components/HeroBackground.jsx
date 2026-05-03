@@ -1,25 +1,24 @@
 "use client";
 
+import Image from "next/image";
+
 export default function HeroBackground() {
   return (
-    <div className="fixed inset-0 -z-20 overflow-hidden">
-      
-      {/* Background Image */}
-      <div
+    <div className="fixed inset-0 -z-20 overflow-hidden bg-[#4a3034]">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#4e3838] via-[#6e4248] to-[#351c20]" />
+      <Image
+        src="/image-hero/hero2.jpg"
+        alt=""
+        fill
+        priority
+        sizes="(max-width: 640px) 340vw, (max-width: 1024px) 240vw, 180vw"
+        quality={92}
         className="
-          absolute inset-0
-          bg-[url('/image-hero/hero2.jpg')]
-          bg-no-repeat
-          bg-cover
-
-          /* DESKTOP – DO NOT TOUCH */
-          md:bg-center
+          object-cover
+          md:object-center
           md:scale-100
-
-          /* MOBILE – PRECISE CONTROL */
           scale-[1.05]
-          bg-[75%_50%]
-
+          object-[75%_50%]
           will-change-transform
         "
       />
