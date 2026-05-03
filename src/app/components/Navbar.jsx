@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const services = [
@@ -14,6 +14,7 @@ const services = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -33,6 +34,20 @@ export default function Navbar() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  useEffect(() => {
+    const prefetchServices = () => {
+      services.forEach((service) => router.prefetch(service.href));
+    };
+
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(prefetchServices);
+      return () => window.cancelIdleCallback?.(id);
+    }
+
+    const id = window.setTimeout(prefetchServices, 1200);
+    return () => window.clearTimeout(id);
+  }, [router]);
 
   /* DESKTOP SCROLL HIDE */
   useEffect(() => {

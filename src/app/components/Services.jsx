@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const services = [
   {
@@ -65,17 +66,22 @@ export default function Services() {
         {/* Cards */}
         <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-8 auto-rows-fr">
           {services.map((service, index) => (
-            <motion.a
+            <motion.div
               key={index}
-              href={`/services/${service.slug}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: index * 0.12 }}
               viewport={{ once: true }}
+              className="h-full"
+            >
+              <Link
+                href={`/services/${service.slug}`}
+                prefetch
               className="
                 group
                 relative
                 block
+                h-full
                 rounded-[2.2rem]
                 p-4 md:p-9
                 overflow-hidden
@@ -153,7 +159,8 @@ export default function Services() {
                   View Packages {"\u2192"}
                 </span>
               </div>
-            </motion.a>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>

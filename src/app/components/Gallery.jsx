@@ -36,6 +36,13 @@ export default function Gallery() {
   }, [selectedImage]);
 
   const openImage = (index) => {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 768px)").matches
+    ) {
+      return;
+    }
+
     setSelectedIndex(index);
     setZoom(1);
   };
@@ -128,7 +135,7 @@ export default function Gallery() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: index * 0.08 }}
               viewport={{ once: true }}
-              className="bg-black/30 backdrop-blur-sm md:backdrop-blur-md rounded-xl md:rounded-2xl text-left cursor-zoom-in"
+              className="bg-black/30 backdrop-blur-sm md:backdrop-blur-md rounded-xl md:rounded-2xl text-left cursor-zoom-in md:cursor-default"
             >
               <div className="relative group overflow-hidden rounded-xl md:rounded-2xl">
                 <Image
