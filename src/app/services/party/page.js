@@ -173,7 +173,7 @@ Please let me know availability and details.`;
       {/* MAIN CONTENT */}
       <motion.div
         ref={pageRef}
-        className="page-hidden relative z-20 min-h-screen px-4 md:px-10 pt-32 md:pt-36 pb-16 md:pb-20"
+        className="page-hidden service-page-stable relative z-20 min-h-screen px-4 md:px-10 pt-32 md:pt-36 pb-16 md:pb-20"
         variants={container}
         initial="hidden"
         animate="show"

@@ -125,7 +125,7 @@ Please share details, availability, and nail design options.`;
       {/* CONTENT */}
       <motion.main
         ref={pageRef}
-        className="page-hidden relative z-20 pt-32 md:pt-36 pb-20 md:pb-24"
+        className="page-hidden service-page-stable relative z-20 pt-32 md:pt-36 pb-20 md:pb-24"
         variants={container}
         initial="hidden"
         animate="show"

@@ -129,7 +129,7 @@ Please share availability and further details.`;
       <div className="pink-glow bottom-[10%] right-[5%] hidden md:block pointer-events-none" />
 
       {/* ===== CONTENT ===== */}
-      <div ref={pageRef} className="page-hidden relative z-20">
+      <div ref={pageRef} className="page-hidden service-page-stable relative z-20">
 
         {/* HERO */}
         <section className="pt-32 md:pt-36 pb-12 md:pb-14 px-4 md:px-5">
