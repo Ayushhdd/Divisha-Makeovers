@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
+import GatedPriceAction from "@/app/components/GatedPriceAction";
 
 /* NAIL EXTENSION IMAGES */
 const nailImages = [
@@ -191,16 +192,19 @@ Please share details, availability, and nail design options.`;
                 >
                   <div>
                     <h3 className="text-xl mb-2">{pkg.title}</h3>
-                    <p className="text-pink-400 text-2xl mb-6">{pkg.price}</p>
                   </div>
 
-                  <button
-                    aria-label={`Book ${pkg.title} via WhatsApp`}
-                    onClick={() => openWhatsApp(pkg.title, pkg.price)}
-                    className="mt-auto w-full md:w-auto md:self-start bg-pink-500 px-6 py-3 rounded-full tracking-widest uppercase text-xs hover:bg-pink-600 transition-all duration-500"
-                  >
-                    Book Now
-                  </button>
+                  <GatedPriceAction
+                    serviceName="Nail Extensions"
+                    packageName={pkg.title}
+                    price={pkg.price}
+                    onBook={() => openWhatsApp(pkg.title, pkg.price)}
+                    className="mt-auto"
+                    bookButtonClassName="w-full md:w-auto md:self-start bg-pink-500 px-6 py-3 rounded-full tracking-widest uppercase text-xs hover:bg-pink-600 transition-all duration-500"
+                    revealedPrice={
+                      <p className="text-pink-400 text-2xl mb-6">{pkg.price}</p>
+                    }
+                  />
                 </div>
               ))}
             </div>

@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
+import GatedPriceAction from "@/app/components/GatedPriceAction";
 
 /* ================= DATA ================= */
 
@@ -237,16 +238,18 @@ Please share availability and further details.`;
                     </div>
                   )}
 
-                  <p className="text-[#FF5CA8] text-3xl mb-8">
-                    {section.price}
-                  </p>
-
-                  <button
-                    onClick={() => openWhatsApp(section.title, section.price)}
-                    className="w-full sm:w-auto bg-pink-500 px-10 py-4 rounded-full tracking-[0.3em] uppercase text-sm hover:bg-pink-600 transition"
-                  >
-                    Book Now
-                  </button>
+                  <GatedPriceAction
+                    serviceName="Engagement & Reception Makeup"
+                    packageName={section.title}
+                    price={section.price}
+                    onBook={() => openWhatsApp(section.title, section.price)}
+                    bookButtonClassName="w-full sm:w-auto bg-pink-500 px-10 py-4 rounded-full tracking-[0.3em] uppercase text-sm hover:bg-pink-600 transition"
+                    revealedPrice={
+                      <p className="text-[#FF5CA8] text-3xl mb-8">
+                        {section.price}
+                      </p>
+                    }
+                  />
                 </div>
               </div>
             </motion.section>

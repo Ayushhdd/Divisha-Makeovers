@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
+import GatedPriceAction from "@/app/components/GatedPriceAction";
 
 const bridalSections = [
   {
@@ -302,28 +303,28 @@ Please let me know availability and further details.`;
                   </div>
                 )}
 
-                {/* PRICE BLOCKS */}
-                {section.title === "Signature Highly Defined (HD) Bridal Package" ? (
-                  <div className="flex flex-wrap items-center gap-4 mb-8">
-                    <p className="text-[#FF5CA8] text-3xl font-medium">{section.price}</p>
+                <GatedPriceAction
+                  serviceName="Bridal Makeup"
+                  packageName={section.title}
+                  price={section.price}
+                  onBook={() => openWhatsApp(section.title, section.price)}
+                  revealedPrice={
+                    section.title === "Signature Highly Defined (HD) Bridal Package" ? (
+                      <div className="flex flex-wrap items-center gap-4 mb-8">
+                        <p className="text-[#FF5CA8] text-3xl font-medium">{section.price}</p>
 
-                    <div className="px-5 py-3 rounded-2xl bg-white/95 border border-[#FF7BBF] shadow-[0_6px_22px_rgba(255,92,168,0.12)] text-[#C2185B] text-[13px] font-semibold tracking-wide leading-tight">
-                      <span className="block font-bold">FREE Bridal Nail Extensions </span>
-                      <span className="block font-bold mt-2">FREE Basic Party Makeup </span>
-                    </div>
-                  </div>
-                ) : section.title === "Airbrush Bridal" ? (
-                  <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
-                ) : (
-                  <p className="text-pink-400 text-3xl mb-8">{section.price}</p>
-                )}
-
-                <button
-                  onClick={() => openWhatsApp(section.title, section.price)}
-                  className="inline-block w-full sm:w-auto bg-pink-500 px-8 py-3 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
-                >
-                  Book Now
-                </button>
+                        <div className="px-5 py-3 rounded-2xl bg-white/95 border border-[#FF7BBF] shadow-[0_6px_22px_rgba(255,92,168,0.12)] text-[#C2185B] text-[13px] font-semibold tracking-wide leading-tight">
+                          <span className="block font-bold">FREE Bridal Nail Extensions </span>
+                          <span className="block font-bold mt-2">FREE Basic Party Makeup </span>
+                        </div>
+                      </div>
+                    ) : section.title === "Airbrush Bridal" ? (
+                      <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
+                    ) : (
+                      <p className="text-pink-400 text-3xl mb-8">{section.price}</p>
+                    )
+                  }
+                />
               </div>
             </div>
           </motion.section>

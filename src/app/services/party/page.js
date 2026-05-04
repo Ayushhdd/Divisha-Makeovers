@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import ClosingEditorial from "@/app/components/ClosingEditorial";
+import GatedPriceAction from "@/app/components/GatedPriceAction";
 
 const partySections = [
   {
@@ -264,18 +265,19 @@ Please let me know availability and details.`;
                     ))}
                   </ul>
 
-                  {section.isLuxury ? (
-                    <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
-                  ) : (
-                    <p className="text-pink-400 text-3xl mb-8">{section.price}</p>
-                  )}
-
-                  <button
-                    onClick={() => openWhatsApp(section.title, section.price)}
-                    className="inline-block w-full sm:w-auto bg-pink-500 px-8 py-3 rounded-full tracking-widest uppercase text-sm hover:bg-pink-600 transition-all duration-500"
-                  >
-                    Book Now
-                  </button>
+                  <GatedPriceAction
+                    serviceName="Party Makeup"
+                    packageName={section.title}
+                    price={section.price}
+                    onBook={() => openWhatsApp(section.title, section.price)}
+                    revealedPrice={
+                      section.isLuxury ? (
+                        <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
+                      ) : (
+                        <p className="text-pink-400 text-3xl mb-8">{section.price}</p>
+                      )
+                    }
+                  />
                 </div>
               </div>
             </motion.section>
