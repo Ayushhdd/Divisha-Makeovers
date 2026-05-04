@@ -205,7 +205,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
-              className="md:hidden w-10 h-10 rounded-full border border-white/30 flex items-center justify-center"
+              className="mobile-menu-trigger w-10 h-10 shrink-0 rounded-full border border-white/30 items-center justify-center"
             >
               <span className="space-y-1.5">
                 <span className="block w-5 h-px bg-white" />

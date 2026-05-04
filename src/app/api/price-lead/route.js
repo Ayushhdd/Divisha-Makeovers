@@ -85,8 +85,16 @@ export async function POST(request) {
     `;
 
     if (!apiKey) {
-      console.info("[price-lead]", { ...lead, submittedAt });
-      return Response.json({ ok: true, notification: "not_configured" });
+      if (!process.env.VERCEL_ENV) {
+        console.warn("[price-lead] Email notifications are not configured.");
+        return Response.json({ ok: true, notification: "not_configured" });
+      }
+
+      console.error("[price-lead] Missing RESEND_API_KEY on Vercel.");
+      return Response.json(
+        { error: "Price notifications are not configured yet." },
+        { status: 500 }
+      );
     }
 
     const resendResponse = await fetch("https://api.resend.com/emails", {

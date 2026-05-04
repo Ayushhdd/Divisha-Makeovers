@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 
 export default function PriceGateModal({
@@ -10,6 +11,7 @@ export default function PriceGateModal({
   onClose,
   onSuccess,
 }) {
+  const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState({
     name: "",
     whatsapp: "",
@@ -18,6 +20,10 @@ export default function PriceGateModal({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -70,9 +76,12 @@ export default function PriceGateModal({
     }
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <motion.div
-      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm"
+      data-floating-layer="true"
+      className="fixed inset-0 z-[999] flex items-center justify-center overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       onMouseDown={(event) => {
@@ -83,7 +92,7 @@ export default function PriceGateModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-md rounded-3xl border border-white/15 bg-[#0b0b0c] p-6 text-white shadow-[0_28px_90px_rgba(0,0,0,0.55)] sm:p-8"
+        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-3xl border border-white/15 bg-[#0b0b0c] p-6 text-white shadow-[0_28px_90px_rgba(0,0,0,0.55)] sm:p-8"
         role="dialog"
         aria-modal="true"
         aria-labelledby="price-gate-title"
@@ -171,6 +180,7 @@ export default function PriceGateModal({
           Cancel
         </button>
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

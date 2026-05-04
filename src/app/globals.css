@@ -110,9 +110,21 @@ body::before {
   z-index: 0;
 }
 
-body > * {
+body > :not([data-floating-layer]) {
   position: relative;
   z-index: 1;
+}
+
+/* ================= MOBILE NAV ================= */
+
+.mobile-menu-trigger {
+  display: inline-flex;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-trigger {
+    display: none;
+  }
 }
 
 /* ================= MOBILE TYPOGRAPHY ================= */
