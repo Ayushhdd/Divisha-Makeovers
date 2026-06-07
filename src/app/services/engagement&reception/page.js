@@ -101,7 +101,7 @@ Please share availability and further details.`;
 
       {/* ===== FIXED BACKGROUND (GPU PROMOTED) ===== */}
       <motion.div
-        className="fixed inset-0 z-0 overflow-hidden bg-[#1b0b10]"
+        className="fixed inset-0 z-0 overflow-hidden bg-[#1b0b10] pointer-events-none"
         style={{
           transform: "translate3d(0,0,0)",
           backfaceVisibility: "hidden",

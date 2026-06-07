@@ -1,10 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { scrollToPageTopInstant } from "@/app/utils/scrollToPageTopInstant";
 
 export default function ServicesLayout({ children }) {
   const pathname = usePathname();
+  const lastResetPathname = useRef(null);
 
   useEffect(() => {
     const previousScrollRestoration = window.history.scrollRestoration;
@@ -16,13 +18,10 @@ export default function ServicesLayout({ children }) {
   }, []);
 
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    if (lastResetPathname.current === pathname) return;
+    lastResetPathname.current = pathname;
 
-    const scrollContainer = document.getElementById("scroll-container");
-    if (scrollContainer) {
-      scrollContainer.scrollTop = 0;
-      scrollContainer.scrollLeft = 0;
-    }
+    scrollToPageTopInstant();
   }, [pathname]);
 
   return children;

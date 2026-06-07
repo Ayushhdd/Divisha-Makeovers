@@ -86,7 +86,7 @@ Please share details, availability, and nail design options.`;
 
       {/* FIXED BACKGROUND (GPU promoted) */}
       <div
-        className="fixed inset-0 z-0 overflow-hidden bg-[#1a0b12]"
+        className="fixed inset-0 z-0 overflow-hidden bg-[#1a0b12] pointer-events-none"
         style={{
           transform: "translateZ(0)",
           backfaceVisibility: "hidden",

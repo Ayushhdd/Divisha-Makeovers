@@ -138,7 +138,7 @@ Please let me know availability and further details.`;
 
       {/* Fixed background - promoted to its own layer */}
       <motion.div
-        className="fixed inset-0 z-0 overflow-hidden bg-[#2a0f14]"
+        className="fixed inset-0 z-0 overflow-hidden bg-[#2a0f14] pointer-events-none"
         style={{
           transform: "translate3d(0,0,0)",
           backfaceVisibility: "hidden",

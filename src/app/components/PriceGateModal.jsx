@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
+import { useLockedBodyScroll } from "@/app/hooks/useLockedBodyScroll";
 
 export default function PriceGateModal({
   serviceName,
@@ -25,10 +26,9 @@ export default function PriceGateModal({
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+  useLockedBodyScroll(true);
 
+  useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") onClose();
     };
@@ -36,7 +36,6 @@ export default function PriceGateModal({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);

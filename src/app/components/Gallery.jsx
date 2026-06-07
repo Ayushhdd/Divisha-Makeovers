@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useLockedBodyScroll } from "@/app/hooks/useLockedBodyScroll";
 
 const images = [
   "/gallery/sgl.jpg",
@@ -19,6 +21,7 @@ export default function Gallery() {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [dragY, setDragY] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const touchStartY = useRef(null);
   const pinchStartDistance = useRef(null);
   const pinchStartZoom = useRef(1);
@@ -26,13 +29,20 @@ export default function Gallery() {
     selectedIndex === null ? null : images[selectedIndex];
 
   useEffect(() => {
-    if (selectedImage) {
-      document.body.style.overflow = "hidden";
-    }
+    setMounted(true);
+  }, []);
 
-    return () => {
-      document.body.style.overflow = "";
+  useLockedBodyScroll(Boolean(selectedImage));
+
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") closeImage();
     };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedImage]);
 
   const openImage = (index) => {
@@ -51,6 +61,8 @@ export default function Gallery() {
     setSelectedIndex(null);
     setZoom(1);
     setDragY(0);
+    touchStartY.current = null;
+    pinchStartDistance.current = null;
   };
 
   const getTouchDistance = (touches) => {
@@ -98,6 +110,67 @@ export default function Gallery() {
 
     setDragY(0);
   };
+
+  const lightbox = (
+    <AnimatePresence>
+      {selectedImage && (
+        <motion.div
+          data-floating-layer="true"
+          className="fixed inset-0 z-[1000] flex h-[100dvh] min-h-[100svh] items-center justify-center bg-black/95 px-4 py-5 md:px-10 md:py-10"
+          style={{ touchAction: "none" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={closeImage}
+          onTouchMove={(event) => event.preventDefault()}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] z-10">
+            <button
+              type="button"
+              aria-label="Close image"
+              onClick={(event) => {
+                event.stopPropagation();
+                closeImage();
+              }}
+              className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          <motion.div
+            className="flex h-full w-full touch-none items-center justify-center overflow-hidden"
+            onClick={(event) => event.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            initial={{ scale: 0.96, y: 20 }}
+            animate={{ scale: 1, y: dragY }}
+            exit={{ scale: 0.96, y: 20 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.div
+              animate={{ scale: zoom }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className="relative h-[calc(100dvh-4rem)] max-h-[92svh] w-full max-w-3xl"
+            >
+              <Image
+                src={selectedImage}
+                alt="Makeup Look"
+                fill
+                sizes="(max-width: 768px) 100vw, 900px"
+                quality={88}
+                className="object-contain"
+                priority
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <section className="relative py-20 md:py-32 text-white">
@@ -159,59 +232,7 @@ export default function Gallery() {
 
       </div>
 
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            className="fixed inset-0 z-[120] bg-black/90 px-4 py-6 md:px-10 md:py-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeImage}
-          >
-            <div className="absolute right-4 top-4 z-10">
-              <button
-                type="button"
-                aria-label="Close image"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  closeImage();
-                }}
-                className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <motion.div
-              className="flex h-full w-full touch-none items-center justify-center overflow-hidden"
-              onClick={(event) => event.stopPropagation()}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              initial={{ scale: 0.96, y: 20 }}
-              animate={{ scale: 1, y: dragY }}
-              exit={{ scale: 0.96, y: 20 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <motion.div
-                animate={{ scale: zoom }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
-                className="relative h-[82vh] w-full max-w-3xl"
-              >
-                <Image
-                  src={selectedImage}
-                  alt="Makeup Look"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 900px"
-                  quality={88}
-                  className="object-contain"
-                  priority
-                />
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {mounted ? createPortal(lightbox, document.body) : null}
     </section>
   );
 }
