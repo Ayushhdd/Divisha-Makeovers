@@ -94,7 +94,7 @@ Please share availability and further details.`;
   return (
     <div
       id="scroll-container"
-      className="relative min-h-screen text-white overflow-x-hidden"
+      className="relative min-h-screen text-white overflow-x-clip"
       style={{ overflowAnchor: "none" }}
     >
       <Navbar />

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { scrollToPageTopInstant } from "@/app/utils/scrollToPageTopInstant";
 
 const services = [
   { label: "Bridal Makeup", href: "/services/bridal" },
@@ -182,7 +181,6 @@ export default function Navbar() {
                           key={s.label}
                           href={s.href}
                           scroll
-                          onClick={scrollToPageTopInstant}
                           className="block px-8 py-5 text-xs uppercase tracking-[0.25em] text-white/70 hover:text-pink-300 hover:bg-pink-500/10 transition"
                         >
                           {s.label}
@@ -265,10 +263,7 @@ export default function Navbar() {
                         key={s.label}
                         href={s.href}
                         scroll
-                        onClick={() => {
-                          scrollToPageTopInstant();
-                          setMobileOpen(false);
-                        }}
+                        onClick={() => setMobileOpen(false)}
                         className="block py-2 text-white/80 hover:text-pink-300"
                       >
                         {s.label}
