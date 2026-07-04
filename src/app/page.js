@@ -98,7 +98,7 @@ className="
             }}
             className="text-sm sm:text-lg mb-6 text-white/80 tracking-wider"
           >
-            Luxury Bridal Makeup Artist
+            Luxury Bridal Makeup Artist in Jalandhar, Punjab
           </motion.p>
 
           <motion.a

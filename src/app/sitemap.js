@@ -1,11 +1,11 @@
 export default function sitemap() {
-    const baseUrl = "https://divisha-makeovers.vercel.app";
+    const baseUrl = "https://divishamakeovers.com";
 
     return [
         {
             url: baseUrl,
             lastModified: new Date(),
-            changeFrequency: "yearly",
+            changeFrequency: "monthly",
             priority: 1,
         },
         {
