@@ -70,6 +70,10 @@ className="
           }}
           className="text-center"
         >
+          <h1 className="sr-only">
+            Divisha Makeovers - Bridal Makeup Artist in Jalandhar, Punjab
+          </h1>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1.05 }}

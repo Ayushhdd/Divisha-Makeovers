@@ -129,9 +129,12 @@ export default function ClosingEditorial() {
           </h4>
 
          <ul className="space-y-5 text-white/65 text-base">
-  <li className="flex items-center gap-3">
-    <MapPin strokeWidth={2.2} className="w-4 h-4 text-pink-400" />
-    Jalandhar, Punjab
+  <li className="flex items-start gap-3">
+    <MapPin strokeWidth={2.2} className="w-4 h-4 mt-1 text-pink-400 flex-none" />
+    <span>
+      19, Satguru Kabir Chowk, Garden Colony, Bombay Nagar, Khurla Kingra,
+      Jalandhar, Punjab 144001
+    </span>
   </li>
 
   <li className="flex items-center gap-3">
