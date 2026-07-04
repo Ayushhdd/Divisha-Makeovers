@@ -14,7 +14,7 @@ const services = [
   {
     title: "Engagement/Reception Makeup Packages",
     desc: "Soft to glamorous makeup looks curated for engagements, receptions, and pre-wedding celebrations with a refined, natural glow.",
-    slug: "engagement&reception",
+    slug: "engagement-reception",
     image: "/hover/engagement.jpg",
   },
   {

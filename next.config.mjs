@@ -1,7 +1,20 @@
 /** @type {import('next').NextConfig} */
+const backendApiUrl = (process.env.BACKEND_API_URL || "http://localhost:5000/api").replace(
+  /\/$/,
+  ""
+);
+
 const nextConfig = {
   compress: true,
   poweredByHeader: false,
+  async rewrites() {
+    return [
+      { source: "/backend-api/:path*", destination: `${backendApiUrl}/:path*` },
+      { source: "/portal", destination: "/portal/index.html" },
+      { source: "/portal/divisha/:path*", destination: "/portal/index.html" },
+      { source: "/portal/admin/:path*", destination: "/portal/index.html" },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920, 2560, 3840],

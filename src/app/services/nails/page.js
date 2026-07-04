@@ -228,15 +228,9 @@ Please share details, availability, and nail design options.`;
       <div className="relative z-20 h-40 bg-gradient-to-b from-transparent to-[#0b0b0c]" />
 
       {/* FOOTER */}
-      <motion.footer
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-        viewport={{ once: true }}
-        className="relative z-20"
-      >
+      <div className="relative z-20">
         <ClosingEditorial />
-      </motion.footer>
+      </div>
     </div>
   );
 }

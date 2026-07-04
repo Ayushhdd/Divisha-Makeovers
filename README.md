@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Divisha Makeovers
 
-## Getting Started
+Combined project for the Divisha Makeovers public website, booking/admin portal, and backend API.
 
-First, run the development server:
+## Project Structure
+
+```text
+.
+├── src/                 # Main Next.js public website
+├── public/              # Website assets
+├── backend/             # Express + MongoDB API for auth, services, appointments, payments, admin
+└── portal-frontend/     # Vite React customer/admin portal
+```
+
+## First-Time Setup
+
+Install dependencies for each app:
+
+```bash
+npm install
+npm run install:backend
+npm run install:portal
+```
+
+Create local env files from the examples:
+
+```bash
+copy backend\.env.example backend\.env
+copy portal-frontend\.env.example portal-frontend\.env
+```
+
+Then update `backend/.env` with the real MongoDB, JWT, email, and admin values.
+
+## Run Locally
+
+Run the local project. This starts the backend API and the main website:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run only the main website:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run dev:site
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run only the backend API:
 
-## Learn More
+```bash
+npm run dev:backend
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run the customer/admin portal:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev:portal
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Build the portal into the main website so `/portal/divisha/dashboard` works from the public site:
 
-## Deploy on Vercel
+```bash
+npm run build:portal
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Default local URLs:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Website: `http://localhost:3000`
+- Backend API: `http://localhost:5000/api`
+- Website-to-backend proxy: `http://localhost:3000/backend-api`
+- Portal: Vite will print the local URL, usually `http://localhost:5173`
+- Combined portal route from the website: `http://localhost:3000/portal/divisha/dashboard`
+
+## Backend API
+
+Backend docs are in:
+
+- `backend/API.md`
+- `backend/SCHEMA.md`
+
+Important backend routes:
+
+- `GET /api/health`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/services`
+- `POST /api/appointments`
+- `POST /api/payments`
+- `GET /api/admin/settings/public`
+
+## Notes
+
+- `.env` files are local only and should not be committed.
+- Uploaded payment screenshots are stored under `backend/uploads/`.
+- The portal frontend reads `VITE_API_URL`; locally it defaults to `http://localhost:5000/api`.

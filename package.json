@@ -3,9 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "start http://localhost:3000 && next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "node scripts/dev-local.mjs",
+    "dev:site": "next dev",
+    "dev:all": "node scripts/dev-local.mjs",
+    "build": "npm run build:portal && npm run build:site",
+    "build:site": "next build",
+    "start": "next start",
+    "dev:backend": "npm --prefix backend run dev",
+    "start:backend": "npm --prefix backend start",
+    "seed:backend": "npm --prefix backend run seed",
+    "dev:portal": "npm --prefix portal-frontend run dev",
+    "build:portal": "npm --prefix portal-frontend run build",
+    "install:backend": "npm --prefix backend install",
+    "install:portal": "npm --prefix portal-frontend install"
   },
   "dependencies": {
     "framer-motion": "^12.23.26",

@@ -1,0 +1,4 @@
+{
+  "installCommand": "npm install && npm --prefix portal-frontend install",
+  "buildCommand": "npm run build"
+}

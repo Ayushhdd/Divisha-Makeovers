@@ -5,13 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { LayoutDashboard } from "lucide-react";
 
 const services = [
   { label: "Bridal Makeup", href: "/services/bridal" },
-  { label: "Engagement & Reception Makeup", href: "/services/engagement&reception" },
+  { label: "Engagement & Reception Makeup", href: "/services/engagement-reception" },
   { label: "Nails Extensions", href: "/services/nails" },
   { label: "Party Makeup", href: "/services/party" },
 ];
+
+const dashboardHref = "/portal/divisha/dashboard";
 
 export default function Navbar() {
   const router = useRouter();
@@ -127,7 +130,7 @@ export default function Navbar() {
             </Link>
 
             {/* DESKTOP LINKS */}
-            <ul className="hidden md:flex items-center gap-14 text-[11px] font-semibold tracking-[0.35em] uppercase text-white/90">
+            <ul className="hidden md:flex items-center gap-10 lg:gap-12 text-[11px] font-semibold tracking-[0.35em] uppercase text-white/90">
               {/* HOME */}
               <li
                 className="relative"
@@ -195,12 +198,21 @@ export default function Navbar() {
             </ul>
 
             {/* CTA */}
-            <a
-              href={isHome ? "#contact" : "/#contact"}
-              className="hidden md:inline-flex px-6 py-2 rounded-full border border-white/40 text-[10px] tracking-[0.4em] uppercase text-white/90 hover:text-pink-300 hover:border-pink-300 transition"
-            >
-              Book Now
-            </a>
+            <div className="hidden md:flex items-center gap-3">
+              <a
+                href={dashboardHref}
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-[#f0d26d]/60 bg-[#f0d26d]/15 px-5 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#f8e7a5] shadow-[0_0_24px_rgba(240,210,109,0.18)] transition hover:-translate-y-0.5 hover:border-[#f0d26d] hover:bg-[#f0d26d]/25 hover:text-white"
+              >
+                <LayoutDashboard aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+                <span>Dashboard</span>
+              </a>
+              <a
+                href={isHome ? "#contact" : "/#contact"}
+                className="inline-flex h-10 items-center px-6 rounded-full border border-white/40 text-[10px] tracking-[0.4em] uppercase text-white/90 hover:text-pink-300 hover:border-pink-300 transition"
+              >
+                Book Now
+              </a>
+            </div>
 
             {/* MOBILE BUTTON */}
             <button
@@ -256,6 +268,14 @@ export default function Navbar() {
                   <a onClick={() => setMobileOpen(false)} href="/">Home</a>
                   <a onClick={() => setMobileOpen(false)} href="/#about">About</a>
                   <a onClick={() => setMobileOpen(false)} href="/#gallery">Gallery</a>
+                  <a
+                    onClick={() => setMobileOpen(false)}
+                    href={dashboardHref}
+                    className="inline-flex items-center justify-center gap-3 rounded-full border border-[#f0d26d]/60 bg-[#f0d26d]/15 px-5 py-3 text-[#f8e7a5] shadow-[0_0_24px_rgba(240,210,109,0.16)]"
+                  >
+                    <LayoutDashboard aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+                    Dashboard
+                  </a>
 
                   <div className="pt-6 border-t border-white/10">
                     {services.map((s) => (
