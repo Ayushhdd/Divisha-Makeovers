@@ -33,17 +33,18 @@ const bridalSections = [
     ],
   },
   {
-    title: "Signature Highly Defined (HD) Bridal Package",
-    price: "₹ 22,500",
-    desc: "Our Signature High Definition Bridal Makeup is designed to help you look radiant and picture-perfect on your special day. This look is curated after understanding the bride's personal preferences and style. Only premium international brands are used to deliver a flawless, long-lasting, and camera-ready finish with advanced and modern hairstyling techniques. Brands include NARS, Tarte, HUDA BEAUTY, Estee Lauder, Laura Mercier, and Charlotte Tilbury for a luxurious HD glow.",
+    title: "Ultra Radiant HD Waterproof Bridal Makeup Package",
+    price: "₹ 18,500",
+    isBestSeller: true,
+    desc: "High-end products used: MAC, PAC, Too Faced Born This Way, Sephora and more.",
     includes: [
-      "Waterproof base makeup",
-      "Advanced & international hairstyling",
-      "Luxury mink eyelashes",
-      "Hair extensions",
-      "Outfit draping",
-      "Premium coloured lenses",
-      "Hair accessories (fresh flowers)",
+      "Ultra Radiant HD Waterproof Bridal Makeup",
+      "24 Hours Stay Guarantee",
+      "Bridal Lashes",
+      "Bridal Lenses",
+      "Bridal Hairstyle / Hairdo",
+      "Dupatta / Outfit Draping",
+      "Fresh Flower Accessories",
     ],
     notes: [
       "Booking is non-refundable and non-adjustable.",
@@ -53,17 +54,21 @@ const bridalSections = [
     reverse: true,
   },
   {
-    title: "Airbrush Bridal",
-    price: "₹ 28,500",
-    desc: "Silicon Base / Silk Makeup is designed to give you a super-natural, flawless, and skin-like finish. This signature makeover uses advanced airbrush base techniques that blend seamlessly into the skin, creating a lightweight yet long-lasting effect. The look enhances your natural features while ensuring a smooth, radiant complexion that stays fresh and camera-ready throughout your special occasion.",
+    title: "Signature Silk Bridal Makeup",
+    price: "₹ 24,999",
+    isLuxury: true,
+    desc: "Using Premium International Brands like NARS, Tarte, Huda Beauty, Laura Mercier, Charlotte Tilbury and more.",
     includes: [
-      "Silicon Base makeup",
-      "Advanced & international hairstyling",
-      "Luxury mink eyelashes",
-      "Hair extensions (if needed)",
-      "Outfit draping",
-      "Premium coloured lenses",
-      "Hair accessories (fresh flowers)",
+      "Signature Silk Bridal Makeup",
+      "Advanced Hairstyle",
+      "Hair Extensions (if required)",
+      "Hair Accessories (Fresh Flowers)",
+      "Dupatta Draping",
+      "Premium Lashes",
+      "Premium Lenses",
+      "FREE Nail Extensions",
+      "FREE Bridal Reel",
+      "FREE Party Makeup for any 1 function: Bangle Ceremony / DJ Night / Jaggo",
     ],
     notes: [
       "Booking is non-refundable and non-adjustable.",
@@ -244,13 +249,13 @@ Please let me know availability and further details.`;
                   } relative rounded-3xl bg-black/60 backdrop-blur-sm md:backdrop-blur-md p-6 md:p-10 border border-white/10`}
               >
                 {/* BADGES */}
-                {section.title === "Signature Highly Defined (HD) Bridal Package" && (
+                {section.isBestSeller && (
                   <div className="inline-block mb-4 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-400 text-pink-300 text-xs tracking-widest uppercase font-semibold">
                     Best Seller
                   </div>
                 )}
 
-                {section.title === "Airbrush Bridal" && (
+                {section.isLuxury && (
                   <div className="inline-block mb-5 px-5 py-1.5 rounded-full bg-[#C9A24D]/20 border border-[#E6C87A] text-[#E6C87A] text-xs tracking-[0.3em] uppercase font-semibold">
                     Luxury & Premium Package
                   </div>
@@ -258,9 +263,9 @@ Please let me know availability and further details.`;
 
                 {/* TITLE */}
                 <h2
-                  className={`mb-4 tracking-wide ${section.title === "Airbrush Bridal"
+                  className={`mb-4 tracking-wide ${section.isLuxury
                       ? "text-6xl"
-                      : section.title === "Signature Highly Defined (HD) Bridal Package"
+                      : section.isBestSeller
                         ? "text-5xl"
                         : "text-4xl"
                     }`}
@@ -270,7 +275,7 @@ Please let me know availability and further details.`;
 
                 <p className="text-white/70 leading-relaxed mb-6">{section.desc}</p>
 
-                {section.title === "Airbrush Bridal" && (
+                {section.isLuxury && (
                   <p className="text-white/60 italic text-sm mb-6">
                     Designed for brides who desire the finest and most exclusive bridal experience.
                   </p>
@@ -309,16 +314,16 @@ Please let me know availability and further details.`;
                   price={section.price}
                   onBook={() => openWhatsApp(section.title, section.price)}
                   revealedPrice={
-                    section.title === "Signature Highly Defined (HD) Bridal Package" ? (
+                    section.isBestSeller ? (
                       <div className="flex flex-wrap items-center gap-4 mb-8">
                         <p className="text-[#FF5CA8] text-3xl font-medium">{section.price}</p>
 
                         <div className="px-5 py-3 rounded-2xl bg-white/95 border border-[#FF7BBF] shadow-[0_6px_22px_rgba(255,92,168,0.12)] text-[#C2185B] text-[13px] font-semibold tracking-wide leading-tight">
-                          <span className="block font-bold">FREE Bridal Nail Extensions </span>
-                          <span className="block font-bold mt-2">FREE Basic Party Makeup </span>
+                          <span className="block font-bold">High-end waterproof bridal finish</span>
+                          <span className="block font-bold mt-2">24 Hours Stay Guarantee</span>
                         </div>
                       </div>
-                    ) : section.title === "Airbrush Bridal" ? (
+                    ) : section.isLuxury ? (
                       <p className="text-[#E6C87A] text-4xl font-medium mb-8">{section.price}</p>
                     ) : (
                       <p className="text-pink-400 text-3xl mb-8">{section.price}</p>

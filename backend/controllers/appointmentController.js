@@ -6,6 +6,7 @@ import { notifyAdmin, notifyCustomer } from '../utils/notifications.js';
 import { sendBookingConfirmation } from '../utils/email.js';
 import { compressImage, getFileUrl } from '../middleware/upload.js';
 import User from '../models/User.js';
+import { getLocalServiceById, isLocalServiceCatalogEnabled } from '../data/serviceCatalog.js';
 
 const cleanText = (value, maxLength = 500) =>
   String(value || '').replace(/\s+/g, ' ').trim().slice(0, maxLength);
@@ -118,8 +119,27 @@ export const createBooking = async (req, res) => {
   let totalAmount = 0;
 
   if (selectedServiceIds.length) {
-    const dbServices = await Service.find({ _id: { $in: selectedServiceIds }, isActive: true });
-    if (dbServices.length !== selectedServiceIds.length) {
+    const localCatalogEnabled = isLocalServiceCatalogEnabled();
+    const localServices = localCatalogEnabled
+      ? selectedServiceIds.map((id) => getLocalServiceById(id)).filter(Boolean)
+      : [];
+    const localServiceIds = new Set(localServices.map((service) => service._id));
+    const dbServiceIds = selectedServiceIds.filter((id) => !localServiceIds.has(String(id)));
+
+    for (const svc of localServices) {
+      services.push({
+        customServiceName: svc.name,
+        customServicePrice: svc.price,
+        price: svc.price,
+        duration: svc.duration,
+      });
+      totalAmount += svc.price;
+    }
+
+    const dbServices = dbServiceIds.length
+      ? await Service.find({ _id: { $in: dbServiceIds }, isActive: true })
+      : [];
+    if (dbServices.length !== dbServiceIds.length) {
       return res.status(400).json({ message: 'One or more selected services are unavailable' });
     }
     for (const svc of dbServices) {

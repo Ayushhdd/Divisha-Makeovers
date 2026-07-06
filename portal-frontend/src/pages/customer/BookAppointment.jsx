@@ -4,12 +4,55 @@ import { useNavigate } from 'react-router-dom';
 import QRCode from 'qrcode';
 import { fetchServices, toggleService, clearSelected } from '../../store/serviceSlice';
 import api from '../../api/axios';
-import { formatCurrency, CATEGORIES } from '../../utils/helpers';
+import { formatCurrency } from '../../utils/helpers';
 import Alert from '../../components/ui/Alert';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 const PAYMENT_TIMER_SECONDS = 5 * 60;
 const todayIso = () => new Date().toISOString().split('T')[0];
+
+const BOOKING_CATEGORIES = [
+  { value: '', label: 'All', code: 'ALL', hint: 'Full menu' },
+  { value: 'Bridal Makeup', label: 'Bridal', code: 'BR', hint: 'Bride looks' },
+  {
+    value: 'Engagement & Reception Makeup',
+    label: 'Engagement',
+    code: 'ER',
+    hint: 'Shagun & reception',
+  },
+  { value: 'Party Makeup', label: 'Party', code: 'PT', hint: 'Function looks' },
+  { value: 'Nail Art', label: 'Nails', code: 'NL', hint: 'Extensions & art' },
+];
+
+const CATEGORY_META = {
+  'Bridal Makeup': {
+    label: 'Bridal Makeup',
+    code: 'BR',
+    accent: 'border-[#e7c59d] bg-[#fffaf4] text-[#8a5a2b]',
+  },
+  'Engagement & Reception Makeup': {
+    label: 'Engagement & Reception',
+    code: 'ER',
+    accent: 'border-[#e8b8c6] bg-[#fff5f8] text-[#934d61]',
+  },
+  'Party Makeup': {
+    label: 'Party Makeup',
+    code: 'PT',
+    accent: 'border-[#d6bfd9] bg-[#fbf7ff] text-[#705173]',
+  },
+  'Nail Art': {
+    label: 'Nail Art',
+    code: 'NL',
+    accent: 'border-[#b9d8d0] bg-[#f4fbf8] text-[#416d64]',
+  },
+};
+
+const getCategoryMeta = (category) =>
+  CATEGORY_META[category] || {
+    label: category || 'Service',
+    code: 'DM',
+    accent: 'border-softpink-200 bg-softpink-50 text-rosegold-700',
+  };
 
 const getCompleteCustomServices = (services) =>
   services
@@ -45,6 +88,7 @@ export default function BookAppointment() {
   const [screenshot, setScreenshot] = useState(null);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const activeCategory = BOOKING_CATEGORIES.find((item) => item.value === category) || BOOKING_CATEGORIES[0];
 
   useEffect(() => {
     dispatch(fetchServices({ search, category }));
@@ -56,6 +100,7 @@ export default function BookAppointment() {
     () => getCompleteCustomServices(customServices),
     [customServices]
   );
+  const selectedIds = useMemo(() => new Set(selected.map((service) => service._id)), [selected]);
   const hasPartialCustomService = customServices.some((service) => {
     const hasName = service.name.trim();
     const hasPrice = String(service.price).trim();
@@ -68,6 +113,21 @@ export default function BookAppointment() {
 
   const total = selected.reduce((sum, s) => sum + s.price, 0) +
     completeCustomServices.reduce((sum, s) => sum + s.price, 0);
+  const selectedItemCount = selected.length + completeCustomServices.length;
+  const serviceGroups = useMemo(() => {
+    const order = BOOKING_CATEGORIES.map((item) => item.value).filter(Boolean);
+    const groups = list.reduce((acc, service) => {
+      if (!acc[service.category]) acc[service.category] = [];
+      acc[service.category].push(service);
+      return acc;
+    }, {});
+
+    return Object.entries(groups).sort(([first], [second]) => {
+      const firstIndex = order.indexOf(first);
+      const secondIndex = order.indexOf(second);
+      return (firstIndex === -1 ? 99 : firstIndex) - (secondIndex === -1 ? 99 : secondIndex);
+    });
+  }, [list]);
 
   const requestedAdvance = parseFloat(form.advanceAmount) || 0;
   const advance = form.paymentOption === 'pay_now' ? requestedAdvance : 0;
@@ -253,33 +313,167 @@ export default function BookAppointment() {
   if (loading && list.length === 0) return <LoadingSpinner />;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-      <h1 className="font-display text-2xl font-bold">Book Appointment</h1>
+    <div className="mx-auto max-w-5xl space-y-6 px-4 pb-10 animate-fade-in sm:px-6">
+      <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/85 p-5 shadow-[0_24px_80px_rgba(92,55,61,0.12)] sm:p-7">
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#b76e79] via-[#e7c59d] to-[#416d64]" />
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-rosegold-500">
+              Divisha Makeovers
+            </p>
+            <h1 className="font-display text-3xl font-bold text-gray-950 sm:text-4xl">
+              Book Appointment
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
+              Choose your service category, select the package, and reserve your slot.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-rosegold-100 bg-softpink-50 px-4 py-3 text-sm text-gray-600">
+            <span className="font-semibold text-rosegold-700">{activeCategory.label}</span>
+            <span className="mx-2 text-rosegold-300">/</span>
+            <span>{selectedItemCount} selected</span>
+          </div>
+        </div>
 
-      <div className="flex gap-2 mb-4">
-        {[1, 2, 3].map((s) => (
-          <div key={s} className={`flex-1 h-1 rounded-full ${step >= s ? 'bg-rosegold-500' : 'bg-gray-200'}`} />
-        ))}
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {[
+            { number: 1, label: 'Services' },
+            { number: 2, label: 'Details' },
+            { number: 3, label: 'Payment' },
+          ].map((item) => (
+            <div key={item.number} className="space-y-2">
+              <div className={`h-1.5 rounded-full ${step >= item.number ? 'bg-rosegold-500' : 'bg-gray-200'}`} />
+              <p className={`text-xs font-semibold uppercase tracking-[0.22em] ${step >= item.number ? 'text-rosegold-700' : 'text-gray-400'}`}>
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {error && <Alert message={error} onClose={() => setError('')} />}
 
       {step === 1 && (
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="space-y-5">
+          <div className="rounded-2xl border border-softpink-200 bg-white/90 p-4 shadow-sm sm:p-5">
+            <div className="flex flex-col gap-3 sm:flex-row">
             <input
-              placeholder="Search services..."
-              className="input-field flex-1"
+              placeholder="Search by package name..."
+              className="input-field flex-1 bg-white"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <select className="input-field sm:w-48" value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="">All Categories</option>
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setCategory('');
+              }}
+              className="btn-secondary whitespace-nowrap"
+            >
+              Reset
+            </button>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+              {BOOKING_CATEGORIES.map((item) => {
+                const isActive = category === item.value;
+                return (
+                  <button
+                    key={item.value || 'all'}
+                    type="button"
+                    onClick={() => setCategory(item.value)}
+                    className={`min-h-[72px] rounded-2xl border px-3 py-3 text-left transition-all ${
+                      isActive
+                        ? 'border-rosegold-500 bg-[#2b151b] text-white shadow-[0_14px_35px_rgba(92,55,61,0.22)]'
+                        : 'border-softpink-200 bg-white text-gray-700 hover:border-rosegold-300 hover:bg-softpink-50'
+                    }`}
+                  >
+                    <span className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold ${
+                      isActive ? 'bg-white/15 text-white' : 'bg-rosegold-50 text-rosegold-700'
+                    }`}>
+                      {item.code}
+                    </span>
+                    <span className="block text-sm font-semibold">{item.label}</span>
+                    <span className={`mt-0.5 block text-[11px] ${isActive ? 'text-white/65' : 'text-gray-400'}`}>
+                      {item.hint}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-5">
+            {serviceGroups.map(([groupName, services]) => {
+              const meta = getCategoryMeta(groupName);
+
+              return (
+                <section key={groupName} className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-display text-xl font-semibold text-gray-950">{meta.label}</p>
+                      <p className="text-xs uppercase tracking-[0.22em] text-gray-400">
+                        {services.length} package{services.length === 1 ? '' : 's'}
+                      </p>
+                    </div>
+                    <span className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold ${meta.accent}`}>
+                      {meta.code}
+                    </span>
+                  </div>
+
+                  <div className="grid gap-3">
+                    {services.map((svc) => {
+                      const isSelected = selectedIds.has(svc._id);
+                      return (
+                        <button
+                          key={svc._id}
+                          type="button"
+                          onClick={() => dispatch(toggleService(svc))}
+                          className={`group relative w-full overflow-hidden rounded-2xl border p-4 text-left transition-all sm:p-5 ${
+                            isSelected
+                              ? 'border-rosegold-500 bg-[#fff8f4] shadow-[0_16px_40px_rgba(183,110,121,0.16)] ring-2 ring-rosegold-200'
+                              : 'border-softpink-200 bg-white hover:-translate-y-0.5 hover:border-rosegold-300 hover:shadow-[0_16px_40px_rgba(92,55,61,0.10)]'
+                          }`}
+                        >
+                          <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#e7c59d] via-[#b76e79] to-[#416d64]" />
+                          <div className="flex gap-4">
+                            <span className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-xs font-bold ${meta.accent}`}>
+                              {meta.code}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                <div className="min-w-0">
+                                  <p className="break-words pr-1 text-base font-semibold leading-6 text-gray-950">
+                                    {svc.name}
+                                  </p>
+                                  <p className="mt-1 text-xs text-gray-500">
+                                    {svc.category} <span className="mx-1 text-rosegold-300">/</span> {svc.duration} min
+                                  </p>
+                                </div>
+                                <p className="shrink-0 text-lg font-bold text-rosegold-700">
+                                  {formatCurrency(svc.price)}
+                                </p>
+                              </div>
+                              <div className="mt-3 flex items-center gap-2 text-xs font-medium">
+                                <span className={`h-2.5 w-2.5 rounded-full ${isSelected ? 'bg-rosegold-500' : 'bg-gray-200'}`} />
+                                <span className={isSelected ? 'text-rosegold-700' : 'text-gray-400'}>
+                                  {isSelected ? 'Selected for booking' : 'Tap to select'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+
+          <div className="hidden">
             {list.map((svc) => {
               const isSelected = selected.some((s) => s._id === svc._id);
               return (
@@ -335,15 +529,63 @@ export default function BookAppointment() {
             <button type="button" onClick={addCustomService} className="text-sm text-rosegold-600">+ Add custom service with price</button>
           </div>
 
-          <div className="card bg-rosegold-50">
-            <p className="text-sm text-gray-600">
-              Selected: {selected.length + completeCustomServices.length} priced services
-              {form.customServiceRequest.trim() ? ' + custom request' : ''}
-            </p>
-            <p className="text-xl font-bold text-rosegold-700">{formatCurrency(total)}</p>
           </div>
 
-          <button onClick={goToStepTwo} className="btn-primary w-full py-3">Continue</button>
+          <aside className="h-fit rounded-2xl border border-white/70 bg-[#2b151b] p-5 text-white shadow-[0_24px_70px_rgba(43,21,27,0.20)] lg:sticky lg:top-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#e7c59d]">
+              Booking Summary
+            </p>
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/10 p-4">
+              <p className="text-sm text-white/65">Selected services</p>
+              <p className="mt-1 text-3xl font-bold">{selectedItemCount}</p>
+              <p className="mt-3 font-display text-3xl text-[#f5d59e]">{formatCurrency(total)}</p>
+            </div>
+
+            <div className="mt-4 max-h-56 space-y-2 overflow-auto pr-1">
+              {selected.length === 0 && completeCustomServices.length === 0 ? (
+                <p className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/60">
+                  No service selected yet.
+                </p>
+              ) : (
+                <>
+                  {selected.map((svc) => (
+                    <div key={svc._id} className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <p className="text-sm font-semibold leading-5">{svc.name}</p>
+                      <p className="mt-1 text-xs text-white/55">{formatCurrency(svc.price)}</p>
+                    </div>
+                  ))}
+                  {completeCustomServices.map((svc) => (
+                    <div key={svc.name} className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <p className="text-sm font-semibold leading-5">{svc.name}</p>
+                      <p className="mt-1 text-xs text-white/55">{formatCurrency(svc.price)}</p>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+
+            {(selectedItemCount > 0 || form.customServiceRequest.trim()) && (
+              <button
+                type="button"
+                onClick={() => {
+                  dispatch(clearSelected());
+                  setCustomServices([]);
+                  setForm({ ...form, customServiceRequest: '' });
+                }}
+                className="mt-4 w-full rounded-xl border border-white/15 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10"
+              >
+                Clear selection
+              </button>
+            )}
+
+            <button
+              onClick={goToStepTwo}
+              disabled={!hasBookingItems || hasPartialCustomService}
+              className="mt-4 w-full rounded-xl bg-[#e7c59d] px-5 py-3 font-semibold text-[#2b151b] transition-colors hover:bg-[#f3d9ad] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Continue
+            </button>
+          </aside>
         </div>
       )}
 

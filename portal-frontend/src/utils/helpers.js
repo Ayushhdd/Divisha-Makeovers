@@ -27,6 +27,7 @@ export const STATUS_LABELS = {
 };
 
 export const CATEGORIES = [
-  'Bridal Makeup', 'Party Makeup', 'HD Makeup', 'Hair Styling',
-  'Pre-Wedding Makeup', 'Nail Art', 'Custom Services',
+  'Bridal Makeup', 'Engagement & Reception Makeup', 'Party Makeup',
+  'HD Makeup', 'Hair Styling', 'Pre-Wedding Makeup', 'Nail Art',
+  'Custom Services',
 ];

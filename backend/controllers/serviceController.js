@@ -1,7 +1,17 @@
 import Service from '../models/Service.js';
+import {
+  getFilteredLocalServices,
+  isLocalServiceCatalogEnabled,
+  serviceCatalog,
+} from '../data/serviceCatalog.js';
 
 export const getServices = async (req, res) => {
   const { search, category } = req.query;
+
+  if (isLocalServiceCatalogEnabled()) {
+    return res.json(getFilteredLocalServices({ search, category }));
+  }
+
   const filter = { isActive: true };
 
   if (category) filter.category = category;
@@ -14,6 +24,10 @@ export const getServices = async (req, res) => {
 };
 
 export const getAllServices = async (req, res) => {
+  if (isLocalServiceCatalogEnabled()) {
+    return res.json(serviceCatalog);
+  }
+
   const services = await Service.find().sort({ createdAt: -1 });
   res.json(services);
 };

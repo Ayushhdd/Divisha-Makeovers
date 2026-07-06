@@ -13,6 +13,7 @@ const serviceSchema = new mongoose.Schema(
         'HD Makeup',
         'Hair Styling',
         'Pre-Wedding Makeup',
+        'Engagement & Reception Makeup',
         'Nail Art',
         'Custom Services',
       ],
