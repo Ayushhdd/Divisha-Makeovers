@@ -9,7 +9,7 @@ import GatedPriceAction from "@/app/components/GatedPriceAction";
 
 const partySections = [
   {
-    title: "Basic Party Makeup",
+    title: "Classic Party Makeup",
     price: "₹ 2,500",
     desc: "A clean and elegant party look designed to enhance your natural features with a soft, fresh finish--perfect for birthdays, family functions, and intimate gatherings.",
     includes: ["Basic Party Makeup", "Simple hairstyling"],
@@ -51,7 +51,7 @@ const partySections = [
     ],
   },
   {
-    title: "Ultra Radiant Silk Party Makeup",
+    title: "AirBrush Party Makeup",
     price: "₹ 6,500",
     desc: "A red-carpet-inspired party look with bold elegance, luxury detailing, and flawless perfection.",
     includes: [
