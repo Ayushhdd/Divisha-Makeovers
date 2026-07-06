@@ -11,17 +11,18 @@ import GatedPriceAction from "@/app/components/GatedPriceAction";
 
 const engagementSections = [
   {
-    title: "Signature High Definition (HD) Engagement/Reception Makeup Package",
-    price: "₹10,500",
+    title: "Signature Silk Engagement / Shagun / Reception Makeup",
+    price: "₹9,500",
     isBestSeller: true,
-    desc: "Our Signature High Definition Engagement/Reception Makeup is designed to help you look radiant and picture-perfect on your special day. This look is curated after understanding the bride's personal preferences and style. Only premium international brands are used to deliver a flawless, long-lasting, and camera-ready finish with advanced and modern hairstyling techniques. Brands include NARS, Tarte, HUDA BEAUTY, Estee Lauder, Laura Mercier, and Charlotte Tilbury for a luxurious HD glow.",
+    desc: "A refined silk makeup look for engagement, shagun and reception functions with premium products, elegant hairstyling and a flawless finish for all skin types.",
     includes: [
-      "Waterproof HD base makeup",
-      "Advanced & international hairstyling",
-      "Luxury eyelashes",
-      "Hair extensions (if needed)",
+      "Silk makeup",
+      "Advanced, traditional or international hairdo",
+      "Luxury mink lashes",
+      "Premium lenses",
+      "Hair extensions",
       "Outfit draping",
-      "Premium finishing products",
+      "Premium international brands such as NARS, Laura Mercier, Huda Beauty and Tarte",
     ],
     notes: ["We don't provide hair accessories for ENGAGEMENT and RECEPTION Makeup"],
     images: [
@@ -30,27 +31,6 @@ const engagementSections = [
       "/signature-hd/signaturehd3.jpg",
       "/signature-hd/signaturehd4.jpg",
     ],
-  },
-  {
-    title: "Signature AirBrush Engagement Makeup Package",
-    price: "₹15,500",
-    isLuxury: true,
-    desc: "Our Signature Airbrush Engagement Makeup delivers a flawless, ultra-smooth finish with a lightweight feel. Designed for brides who want refined luxury and long-lasting perfection.",
-    includes: [
-      "Silicon / Airbrush base makeup",
-      "Advanced & international hairstyling",
-      "Luxury eyelashes",
-      "Hair extensions (if needed)",
-      "Outfit draping",
-      "Premium finishing products",
-    ],
-    images: [
-      "/signature-airbrush/signatureairbrush1.jpg",
-      "/signature-airbrush/signatureairbrush2.jpg",
-      "/signature-airbrush/signatureairbrush3.jpg",
-      "/signature-airbrush/signatureairbrush4.jpg",
-    ],
-    reverse: true,
   },
 ];
 

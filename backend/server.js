@@ -57,12 +57,15 @@ const seedAdmin = async () => {
     const serviceCount = await Service.countDocuments();
     if (serviceCount === 0) {
       const defaultServices = [
-        { name: 'Bridal Makeup', description: 'Complete bridal makeup with premium products', category: 'Bridal Makeup', price: 15000, duration: 180 },
-        { name: 'Party Makeup', description: 'Glamorous party makeup look', category: 'Party Makeup', price: 3500, duration: 90 },
-        { name: 'HD Makeup', description: 'High-definition camera-ready makeup', category: 'HD Makeup', price: 5000, duration: 120 },
-        { name: 'Hair Styling', description: 'Professional hair styling for any occasion', category: 'Hair Styling', price: 2500, duration: 60 },
-        { name: 'Pre-Wedding Makeup', description: 'Makeup for pre-wedding shoots and events', category: 'Pre-Wedding Makeup', price: 8000, duration: 150 },
-        { name: 'Nail Art', description: 'Creative nail art and manicure', category: 'Nail Art', price: 1500, duration: 45 },
+        { name: 'Ultra Radiant HD Waterproof Bridal Makeup Package', description: 'HD waterproof bridal makeup package with bridal lashes, lenses, hairstyle and draping.', category: 'Bridal Makeup', price: 18500, duration: 180 },
+        { name: 'Signature Silk Bridal Makeup', description: 'Premium signature silk bridal package with advanced hairstyle, draping, premium lashes, lenses and bridal extras.', category: 'Bridal Makeup', price: 25000, duration: 180 },
+        { name: 'Signature Silk Engagement / Shagun / Reception Makeup', description: 'Silk makeup for engagement, shagun or reception with premium products, hairdo, lashes, lenses and draping.', category: 'Bridal Makeup', price: 9500, duration: 60 },
+        { name: 'Basic Party Makeup', description: 'Basic party makeup with simple hairstyling.', category: 'Party Makeup', price: 2500, duration: 150 },
+        { name: 'HD Party Makeup', description: 'HD party makeup with lashes and advanced hairstyling.', category: 'HD Makeup', price: 3500, duration: 60 },
+        { name: 'Signature Party Makeup', description: 'Signature party makeup with lashes, lenses and advanced hairstyling.', category: 'Party Makeup', price: 4500, duration: 90 },
+        { name: 'Ultra Radiant Silk Party Makeup', description: 'Premium silk party makeup with luxury lashes, lenses, advanced hairstyling and draping.', category: 'Party Makeup', price: 6500, duration: 90 },
+        { name: 'Temporary Nail Extensions', description: 'Temporary nail extensions with nail art included.', category: 'Nail Art', price: 1500, duration: 45 },
+        { name: 'Acrylic Nail Extensions', description: 'Acrylic nail extensions with nail art included.', category: 'Nail Art', price: 2500, duration: 60 },
       ];
       await Service.insertMany(defaultServices);
       console.log('✓ Default services seeded');

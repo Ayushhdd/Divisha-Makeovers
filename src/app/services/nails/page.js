@@ -180,11 +180,10 @@ Please share details, availability, and nail design options.`;
           <motion.div variants={item} className="max-w-6xl mx-auto mb-28">
             <h2 className="text-3xl mb-8 md:mb-10 tracking-wide">Nail Packages</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
               {[
-                { title: "Temporary Nail Extension (including nail art)", price: "₹1,700" },
-                { title: "Gel/Acrylic Nail Extensions (including nail art)", price: "₹2,600" },
-                { title: "Shellac(including nail art)", price: "₹1,200" },
+                { title: "Temporary Nail Extensions", price: "₹1,500" },
+                { title: "Acrylic Nail Extensions", price: "₹2,500" },
               ].map((pkg, i) => (
                 <div
                   key={i}
