@@ -10,6 +10,39 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 const PAYMENT_TIMER_SECONDS = 5 * 60;
 const todayIso = () => new Date().toISOString().split('T')[0];
+const TIME_SLOTS = [
+  { value: '07:00', label: '7:00 AM' },
+  { value: '07:30', label: '7:30 AM' },
+  { value: '08:00', label: '8:00 AM' },
+  { value: '08:30', label: '8:30 AM' },
+  { value: '09:00', label: '9:00 AM' },
+  { value: '09:30', label: '9:30 AM' },
+  { value: '10:00', label: '10:00 AM' },
+  { value: '10:30', label: '10:30 AM' },
+  { value: '11:00', label: '11:00 AM' },
+  { value: '11:30', label: '11:30 AM' },
+  { value: '12:00', label: '12:00 PM' },
+  { value: '12:30', label: '12:30 PM' },
+  { value: '13:00', label: '1:00 PM' },
+  { value: '13:30', label: '1:30 PM' },
+  { value: '14:00', label: '2:00 PM' },
+  { value: '14:30', label: '2:30 PM' },
+  { value: '15:00', label: '3:00 PM' },
+  { value: '15:30', label: '3:30 PM' },
+  { value: '16:00', label: '4:00 PM' },
+  { value: '16:30', label: '4:30 PM' },
+  { value: '17:00', label: '5:00 PM' },
+  { value: '17:30', label: '5:30 PM' },
+  { value: '18:00', label: '6:00 PM' },
+  { value: '18:30', label: '6:30 PM' },
+  { value: '19:00', label: '7:00 PM' },
+  { value: '19:30', label: '7:30 PM' },
+  { value: '20:00', label: '8:00 PM' },
+  { value: '20:30', label: '8:30 PM' },
+  { value: '21:00', label: '9:00 PM' },
+  { value: '21:30', label: '9:30 PM' },
+  { value: '22:00', label: '10:00 PM' },
+];
 
 const BOOKING_CATEGORIES = [
   { value: '', label: 'All', code: 'ALL', hint: 'Full menu' },
@@ -598,8 +631,38 @@ export default function BookAppointment() {
           </div>
           <div>
             <label className="label">Appointment Time *</label>
-            <input type="time" required className="input-field"
-              value={form.appointmentTime} onChange={(e) => setForm({ ...form, appointmentTime: e.target.value })} />
+            <select
+              required
+              className="input-field bg-white"
+              value={form.appointmentTime}
+              onChange={(e) => setForm({ ...form, appointmentTime: e.target.value })}
+            >
+              <option value="">Select time</option>
+              {TIME_SLOTS.map((slot) => (
+                <option key={slot.value} value={slot.value}>
+                  {slot.label}
+                </option>
+              ))}
+            </select>
+            <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4">
+              {TIME_SLOTS.filter((_, index) => index % 2 === 0).map((slot) => {
+                const isSelected = form.appointmentTime === slot.value;
+                return (
+                  <button
+                    key={slot.value}
+                    type="button"
+                    onClick={() => setForm({ ...form, appointmentTime: slot.value })}
+                    className={`rounded-xl border px-3 py-2 text-sm font-medium transition-all ${
+                      isSelected
+                        ? 'border-rosegold-500 bg-rosegold-500 text-white shadow-sm'
+                        : 'border-softpink-200 bg-white text-gray-700 hover:border-rosegold-300 hover:bg-softpink-50'
+                    }`}
+                  >
+                    {slot.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
           <div>
             <label className="label">Venue / Location *</label>
