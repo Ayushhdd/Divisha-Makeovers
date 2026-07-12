@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
     setError('');
     try {
       const { data } = await api.post('/auth/forgot-password', { email });
-      setMessage(data.message);
+      setMessage('If that email has an account, a 6-digit OTP has been sent. Check your inbox and spam folder.');
       setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send OTP');
@@ -67,8 +67,8 @@ export default function ForgotPasswordPage() {
             <form onSubmit={handleReset} className="space-y-4">
               <div>
                 <label className="label">OTP</label>
-                <input required className="input-field" value={otp} maxLength="6"
-                  onChange={(e) => setOtp(e.target.value)} placeholder="6-digit OTP" />
+                <input required inputMode="numeric" autoComplete="one-time-code" className="input-field" value={otp} maxLength="6"
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} placeholder="6-digit OTP" />
               </div>
               <div>
                 <label className="label">New Password</label>

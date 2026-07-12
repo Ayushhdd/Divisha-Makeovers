@@ -1,9 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const createTransporter = () => {
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    return null;
-  }
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) return null;
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT) || 587,
@@ -18,8 +16,11 @@ const createTransporter = () => {
 export const sendEmail = async ({ to, subject, html }) => {
   const transporter = createTransporter();
   if (!transporter) {
-    console.log(`[Email skipped - no SMTP] To: ${to}, Subject: ${subject}`);
-    return { success: true, skipped: true };
+    console.error(`[Email not sent - SMTP is incomplete] To: ${to}, Subject: ${subject}`);
+    return {
+      success: false,
+      error: 'Email service is not configured. Please contact Divisha Makeovers.',
+    };
   }
   try {
     await transporter.sendMail({

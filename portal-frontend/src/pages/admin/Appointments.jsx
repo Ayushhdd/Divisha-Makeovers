@@ -7,14 +7,19 @@ export default function AdminAppointments() {
   const [appointments, setAppointments] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [services, setServices] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ date: '', customer: '', status: '', service: '' });
 
   const load = () => {
     setLoading(true);
     const params = Object.fromEntries(Object.entries(filters).filter(([, v]) => v));
-    api.get('/appointments/admin/all', { params }).then(({ data }) => {
-      setAppointments(data);
+    Promise.all([
+      api.get('/appointments/admin/all', { params }),
+      api.get('/payments/all'),
+    ]).then(([appointmentsResponse, paymentsResponse]) => {
+      setAppointments(appointmentsResponse.data);
+      setPayments(paymentsResponse.data);
       setLoading(false);
     });
   };
@@ -27,6 +32,16 @@ export default function AdminAppointments() {
 
   const updateStatus = async (id, status) => {
     await api.put(`/appointments/${id}/status`, { status });
+    load();
+  };
+
+  const verifyPayment = async (payment, status) => {
+    const verificationNote = status === 'rejected'
+      ? window.prompt('Why is this payment being rejected?')
+      : window.prompt('Optional note, for example: matched in UPI app') || '';
+
+    if (status === 'rejected' && !verificationNote) return;
+    await api.put(`/payments/${payment._id}/verify`, { status, verificationNote });
     load();
   };
 
@@ -57,7 +72,9 @@ export default function AdminAppointments() {
 
       {loading ? <LoadingSpinner /> : (
         <div className="space-y-3">
-          {appointments.map((apt) => (
+          {appointments.map((apt) => {
+            const payment = payments.find((item) => item.appointment?._id === apt._id);
+            return (
             <div key={apt._id} className="card">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                 <div>
@@ -74,6 +91,16 @@ export default function AdminAppointments() {
                   <p className="text-xs text-gray-500">Paid: {formatCurrency(apt.advancePaid)}</p>
                 </div>
               </div>
+              {payment && (
+                <div className="mt-3 rounded-xl border border-softpink-100 bg-softpink-50 p-3 text-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span>Payment submitted: <strong>{formatCurrency(payment.amount)}</strong></span>
+                    <span className="text-xs uppercase tracking-wide text-gray-500">{payment.status}</span>
+                  </div>
+                  {payment.transactionRef && <p className="mt-1 text-xs text-gray-600">UPI reference: <strong>{payment.transactionRef}</strong></p>}
+                  {payment.verificationNote && <p className="mt-1 text-xs text-gray-600">Admin note: {payment.verificationNote}</p>}
+                </div>
+              )}
               {apt.status === 'pending_payment' && (
                 <div className="flex gap-2 mt-3">
                   <button onClick={() => updateStatus(apt._id, 'pending_approval')} className="btn-primary text-sm py-1.5 flex-1">
@@ -86,12 +113,17 @@ export default function AdminAppointments() {
               )}
               {apt.status === 'pending_approval' && (
                 <div className="flex gap-2 mt-3">
-                  <button onClick={() => updateStatus(apt._id, 'confirmed')} className="btn-primary text-sm py-1.5 flex-1">
-                    Approve
-                  </button>
-                  <button onClick={() => updateStatus(apt._id, 'payment_rejected')} className="btn-outline text-sm py-1.5 flex-1 text-red-600">
-                    Reject Payment
-                  </button>
+                  {payment?.status === 'pending' ? (
+                    <>
+                      <a href={payment.screenshotUrl} target="_blank" rel="noreferrer" className="btn-outline text-sm py-1.5 flex-1 text-center">View Screenshot</a>
+                      <button onClick={() => verifyPayment(payment, 'verified')} className="btn-primary text-sm py-1.5 flex-1">Verify in UPI App</button>
+                      <button onClick={() => verifyPayment(payment, 'rejected')} className="btn-outline text-sm py-1.5 flex-1 text-red-600">Reject Payment</button>
+                    </>
+                  ) : !payment ? (
+                    <button onClick={() => updateStatus(apt._id, 'confirmed')} className="btn-primary text-sm py-1.5 flex-1">Approve Booking Request</button>
+                  ) : (
+                    <p className="flex-1 rounded-xl bg-gray-50 px-3 py-2 text-center text-xs text-gray-500">Waiting for a new payment submission</p>
+                  )}
                 </div>
               )}
               {apt.status === 'payment_rejected' && (
@@ -110,7 +142,8 @@ export default function AdminAppointments() {
                 </button>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

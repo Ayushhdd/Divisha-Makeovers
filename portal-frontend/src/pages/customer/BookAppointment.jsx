@@ -292,7 +292,7 @@ export default function BookAppointment() {
       return;
     }
     if (form.paymentOption === 'pay_now' && !screenshot) {
-      setError('Please upload the payment screenshot before confirming the booking.');
+      setError('Please upload the payment screenshot before submitting it for verification.');
       return;
     }
     setError('');
@@ -706,7 +706,8 @@ export default function BookAppointment() {
                 checked={form.paymentOption === 'pay_now'}
                 onChange={() => setForm({ ...form, paymentOption: 'pay_now' })} />
               <span className="font-medium">Pay Advance Now</span>
-              <p className="text-xs text-gray-500 mt-1">Upload payment screenshot → Booking Confirmed</p>
+              <p className="text-xs font-medium text-amber-700 mt-1">Payment is not confirmed until the owner verifies it in the UPI or bank app.</p>
+              <p className="text-xs text-gray-500 mt-1">Upload your payment screenshot for owner verification.</p>
             </label>
             <label className={`card block cursor-pointer ${form.paymentOption === 'pay_later' ? 'ring-2 ring-rosegold-400' : ''}`}>
               <input type="radio" name="payment" value="pay_later" className="mr-2"
@@ -771,7 +772,7 @@ export default function BookAppointment() {
           <div className="flex gap-3">
             <button onClick={() => setStep(2)} className="btn-secondary flex-1">Back</button>
             <button onClick={handleSubmit} disabled={submitting} className="btn-primary flex-1">
-              {submitting ? 'Booking...' : 'Confirm Booking'}
+              {submitting ? 'Submitting...' : form.paymentOption === 'pay_now' ? 'Submit for Verification' : 'Request Booking'}
             </button>
           </div>
         </div>

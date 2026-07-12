@@ -211,8 +211,9 @@ export const createBooking = async (req, res) => {
     venue: venueText,
     notes: notesText,
     totalAmount,
-    advancePaid: advance,
-    remainingBalance: totalAmount - advance,
+    // A screenshot is only a payment claim. The balance changes after owner verification.
+    advancePaid: 0,
+    remainingBalance: totalAmount,
     paymentOption: paymentOptionValue,
     paymentScreenshot,
     status,
@@ -350,6 +351,28 @@ export const updateAppointmentStatus = async (req, res) => {
   const appointment = await Appointment.findById(req.params.id).populate('customer');
 
   if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+  const allowedStatuses = [
+    'pending_payment',
+    'pending_approval',
+    'confirmed',
+    'rejected',
+    'payment_rejected',
+    'completed',
+    'cancelled',
+  ];
+  if (!allowedStatuses.includes(status)) {
+    return res.status(400).json({ message: 'Invalid appointment status' });
+  }
+
+  if (status === 'confirmed' && appointment.paymentOption === 'pay_now') {
+    const verifiedPayment = await Payment.exists({ appointment: appointment._id, status: 'verified' });
+    if (!verifiedPayment) {
+      return res.status(400).json({
+        message: 'Verify the payment against the UPI or bank record before confirming this booking',
+      });
+    }
+  }
 
   const oldStatus = appointment.status;
   appointment.status = status;

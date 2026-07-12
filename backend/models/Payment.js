@@ -31,6 +31,9 @@ const paymentSchema = new mongoose.Schema(
     },
     transactionRef: { type: String, trim: true, default: '' },
     notes: { type: String, trim: true, default: '' },
+    verificationNote: { type: String, trim: true, default: '' },
+    verifiedAt: { type: Date },
+    verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   { timestamps: true }
 );

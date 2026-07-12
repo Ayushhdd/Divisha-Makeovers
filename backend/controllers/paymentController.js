@@ -1,12 +1,21 @@
 import Payment from '../models/Payment.js';
 import Appointment from '../models/Appointment.js';
 import { notifyAdmin, notifyCustomer } from '../utils/notifications.js';
+import { getFileUrl } from '../middleware/upload.js';
+
+const withScreenshotUrl = (payment, req) => {
+  const result = payment.toObject ? payment.toObject() : payment;
+  return {
+    ...result,
+    screenshotUrl: result.screenshot ? getFileUrl(result.screenshot, req) : '',
+  };
+};
 
 export const getMyPayments = async (req, res) => {
   const payments = await Payment.find({ customer: req.user._id })
     .populate('appointment', 'bookingReference appointmentDate totalAmount')
     .sort({ createdAt: -1 });
-  res.json(payments);
+  res.json(payments.map((payment) => withScreenshotUrl(payment, req)));
 };
 
 export const getAllPayments = async (req, res) => {
@@ -14,21 +23,43 @@ export const getAllPayments = async (req, res) => {
     .populate('customer', 'fullName email mobile')
     .populate('appointment', 'bookingReference')
     .sort({ createdAt: -1 });
-  res.json(payments);
+  res.json(payments.map((payment) => withScreenshotUrl(payment, req)));
 };
 
 export const verifyPayment = async (req, res) => {
   const payment = await Payment.findById(req.params.id).populate('appointment');
   if (!payment) return res.status(404).json({ message: 'Payment not found' });
 
-  const newStatus = req.body.status || 'verified';
+  const newStatus = req.body.status;
+  const verificationNote = String(req.body.verificationNote || '').trim().slice(0, 500);
+  if (!['verified', 'rejected'].includes(newStatus)) {
+    return res.status(400).json({ message: 'Payment status must be verified or rejected' });
+  }
+  if (payment.status !== 'pending') {
+    return res.status(400).json({ message: 'Only pending payments can be verified or rejected' });
+  }
+  if (newStatus === 'rejected' && !verificationNote) {
+    return res.status(400).json({ message: 'Add a reason before rejecting a payment' });
+  }
+
   payment.status = newStatus;
+  payment.verificationNote = verificationNote;
+  payment.verifiedAt = new Date();
+  payment.verifiedBy = req.user._id;
   await payment.save();
 
   console.log(`[Payment Verification] Payment ID: ${payment._id}, Status: ${newStatus}, Amount: ${payment.amount}`);
 
   // Update appointment status based on payment verification
   if (newStatus === 'verified') {
+    payment.appointment.advancePaid = Math.min(
+      payment.appointment.totalAmount,
+      payment.appointment.advancePaid + payment.amount
+    );
+    payment.appointment.remainingBalance = Math.max(
+      0,
+      payment.appointment.totalAmount - payment.appointment.advancePaid
+    );
     payment.appointment.status = 'confirmed';
     await payment.appointment.save();
     console.log(`[Appointment Confirmed] Reference: ${payment.appointment.bookingReference} after payment verification`);
@@ -78,6 +109,10 @@ export const addPayment = async (req, res) => {
     screenshot = req.file.filename;
   }
 
+  if (!screenshot) {
+    return res.status(400).json({ message: 'Upload the payment screenshot before submitting it for verification' });
+  }
+
   const payment = await Payment.create({
     appointment: appointmentId,
     customer: req.user._id,
@@ -85,13 +120,11 @@ export const addPayment = async (req, res) => {
     type: payAmount >= appointment.remainingBalance ? 'balance' : 'advance',
     method: method || (screenshot ? 'screenshot' : 'upi'),
     screenshot,
-    transactionRef: transactionRef || '',
+    transactionRef: String(transactionRef || '').replace(/\s/g, '').trim(),
     status: 'pending',
   });
 
-  appointment.advancePaid += payAmount;
-  appointment.remainingBalance -= payAmount;
-  if (appointment.remainingBalance <= 0) appointment.remainingBalance = 0;
+  appointment.status = 'pending_approval';
   await appointment.save();
 
   await notifyAdmin({
