@@ -74,6 +74,8 @@ const seedAdmin = async () => {
 seedAdmin();
 
 const app = express();
+// Railway terminates the public proxy before this process receives the request.
+app.set('trust proxy', 1);
 const localOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
