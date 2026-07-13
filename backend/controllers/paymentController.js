@@ -76,27 +76,29 @@ export const verifyPayment = async (req, res) => {
     await payment.appointment.save();
     console.log(`[Appointment Confirmed] Reference: ${payment.appointment.bookingReference} after payment verification`);
 
-    await notifyCustomer({
+    // A notification failure must not turn a successful payment approval into
+    // an error for the owner after the payment and booking have been saved.
+    void notifyCustomer({
       customerId: payment.customer,
       type: 'payment_confirmed',
       title: 'Payment Confirmed',
       message: `Your payment of ₹${payment.amount} has been verified. Your booking ${payment.appointment.bookingReference} is now confirmed.`,
       relatedId: payment._id,
       relatedModel: 'Payment',
-    });
+    }).catch((error) => console.error('Could not create payment confirmation notification:', error));
   } else if (newStatus === 'rejected') {
     payment.appointment.status = 'payment_rejected';
     await payment.appointment.save();
     console.log(`[Appointment Payment Rejected] Reference: ${payment.appointment.bookingReference}`);
 
-    await notifyCustomer({
+    void notifyCustomer({
       customerId: payment.customer,
       type: 'payment_rejected',
       title: 'Payment Rejected',
       message: `Your payment of ₹${payment.amount} was not verified. Please upload a valid payment screenshot.`,
       relatedId: payment._id,
       relatedModel: 'Payment',
-    });
+    }).catch((error) => console.error('Could not create payment rejection notification:', error));
   }
 
   res.json(payment);

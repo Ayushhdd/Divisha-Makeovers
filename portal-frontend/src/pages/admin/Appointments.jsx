@@ -70,11 +70,9 @@ export default function AdminAppointments() {
       return;
     }
 
-    const verificationNote = window.prompt(
-      status === 'rejected'
-        ? 'Why is this payment being rejected?'
-        : 'Optional verification note, for example: matched in UPI app'
-    );
+    const verificationNote = status === 'rejected'
+      ? window.prompt('Why is this payment being rejected?')
+      : 'Verified by owner';
     if (status === 'rejected' && !verificationNote?.trim()) return;
 
     setActionId(`${payment._id}:${status}`);
@@ -133,6 +131,10 @@ export default function AdminAppointments() {
           {appointments.map((appointment) => {
             const payment = getPaymentForAppointment(appointment._id);
             const payNow = appointment.paymentOption === 'pay_now';
+            const awaitingPaymentReview =
+              payNow &&
+              payment?.status === 'pending' &&
+              ['pending_approval', 'payment_rejected'].includes(appointment.status);
             const verifying = actionId === `${payment?._id}:verified`;
             const rejecting = actionId === `${payment?._id}:rejected`;
 
@@ -177,7 +179,7 @@ export default function AdminAppointments() {
                   </div>
                 )}
 
-                {appointment.status === 'pending_approval' && payNow && (
+                {awaitingPaymentReview && (
                   <div className="mt-3 space-y-2">
                     {payment?.status === 'pending' ? (
                       <div className="grid gap-2 sm:grid-cols-3">
@@ -212,7 +214,7 @@ export default function AdminAppointments() {
                   </div>
                 )}
 
-                {appointment.status === 'payment_rejected' && (
+                {appointment.status === 'payment_rejected' && !awaitingPaymentReview && (
                   <div className="mt-3 flex gap-2">
                     <p className="flex-1 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
                       Customer has been asked to upload a new screenshot. Do not approve this booking until the new proof is verified.
