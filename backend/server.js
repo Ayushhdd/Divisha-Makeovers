@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { startReminderJob } from './utils/reminderJob.js';
+import { startPaymentScreenshotCleanupJob } from './utils/paymentScreenshotCleanup.js';
 
 import authRoutes from './routes/authRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
@@ -29,6 +30,12 @@ const __dirname = path.dirname(__filename);
 
 connectDB();
 startReminderJob();
+const isCleanupEnabled =
+  process.env.ENABLE_PAYMENT_SCREENSHOT_CLEANUP !== 'false' &&
+  !['development', 'test'].includes(process.env.NODE_ENV);
+if (isCleanupEnabled) {
+  startPaymentScreenshotCleanupJob();
+}
 
 // Auto-seed admin user on startup
 const seedAdmin = async () => {
