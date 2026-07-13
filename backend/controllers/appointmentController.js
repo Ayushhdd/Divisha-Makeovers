@@ -281,7 +281,9 @@ export const getMyAppointments = async (req, res) => {
 
   if (type === 'upcoming') {
     filter.appointmentDate = { $gte: now };
-    filter.status = { $in: ['confirmed', 'pending_approval'] };
+    filter.status = {
+      $in: ['confirmed', 'pending_approval', 'pending_payment', 'payment_rejected'],
+    };
   } else if (type === 'past') {
     filter.$or = [
       { appointmentDate: { $lt: now } },
@@ -309,11 +311,11 @@ export const getAppointmentById = async (req, res) => {
     return res.status(403).json({ message: 'Not authorized' });
   }
 
-  if (result.paymentScreenshot && req.file !== undefined) {
-    result.paymentScreenshot = getFileUrl(result.paymentScreenshot, req);
-  }
-
-  res.json(result);
+  const payload = result.toObject();
+  payload.paymentScreenshotUrl = payload.paymentScreenshot
+    ? getFileUrl(payload.paymentScreenshot, req)
+    : '';
+  res.json(payload);
 };
 
 export const getAllAppointments = async (req, res) => {
@@ -374,6 +376,10 @@ export const updateAppointmentStatus = async (req, res) => {
     }
   }
 
+  if (status === 'completed' && appointment.status !== 'confirmed') {
+    return res.status(400).json({ message: 'Only confirmed appointments can be marked completed' });
+  }
+
   const oldStatus = appointment.status;
   appointment.status = status;
   if (adminNotes !== undefined) appointment.adminNotes = adminNotes;
@@ -421,6 +427,10 @@ export const cancelAppointment = async (req, res) => {
     appointment.customer.toString() !== req.user._id.toString()
   ) {
     return res.status(403).json({ message: 'Not authorized' });
+  }
+
+  if (appointment.status === 'completed') {
+    return res.status(400).json({ message: 'Completed appointments cannot be cancelled' });
   }
 
   appointment.status = 'cancelled';
@@ -489,7 +499,16 @@ export const getReceipt = async (req, res) => {
     return res.status(403).json({ message: 'Not authorized' });
   }
 
-  const payments = await Payment.find({ appointment: result._id }).sort({ createdAt: 1 });
+  if (!['confirmed', 'completed'].includes(result.status)) {
+    return res.status(409).json({
+      message: 'Your receipt will be available after the booking and payment are approved.',
+    });
+  }
+
+  const payments = await Payment.find({
+    appointment: result._id,
+    status: 'verified',
+  }).sort({ createdAt: 1 });
 
   res.json({
     appointment: result,

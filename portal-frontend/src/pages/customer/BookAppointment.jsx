@@ -696,8 +696,8 @@ export default function BookAppointment() {
               <input type="number" min="0" max={total} className="input-field" value={form.advanceAmount}
                 onChange={(e) => setForm({ ...form, advanceAmount: e.target.value })} />
             </div>
-            <div className="flex justify-between text-sm"><span>Advance Paid</span><span>{formatCurrency(advance)}</span></div>
-            <div className="flex justify-between font-semibold text-rosegold-700"><span>Remaining Balance</span><span>{formatCurrency(remaining)}</span></div>
+            <div className="flex justify-between text-sm"><span>Advance to Submit</span><span>{formatCurrency(advance)}</span></div>
+            <div className="flex justify-between font-semibold text-rosegold-700"><span>Balance After Verification</span><span>{formatCurrency(remaining)}</span></div>
           </div>
 
           <div className="space-y-3">

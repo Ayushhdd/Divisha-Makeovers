@@ -1,7 +1,7 @@
 import Payment from '../models/Payment.js';
 import Appointment from '../models/Appointment.js';
 import { notifyAdmin, notifyCustomer } from '../utils/notifications.js';
-import { getFileUrl } from '../middleware/upload.js';
+import { compressImage, getFileUrl } from '../middleware/upload.js';
 
 const withScreenshotUrl = (payment, req) => {
   const result = payment.toObject ? payment.toObject() : payment;
@@ -13,7 +13,7 @@ const withScreenshotUrl = (payment, req) => {
 
 export const getMyPayments = async (req, res) => {
   const payments = await Payment.find({ customer: req.user._id })
-    .populate('appointment', 'bookingReference appointmentDate totalAmount')
+    .populate('appointment', 'bookingReference appointmentDate totalAmount remainingBalance status')
     .sort({ createdAt: -1 });
   res.json(payments.map((payment) => withScreenshotUrl(payment, req)));
 };
@@ -21,32 +21,44 @@ export const getMyPayments = async (req, res) => {
 export const getAllPayments = async (req, res) => {
   const payments = await Payment.find()
     .populate('customer', 'fullName email mobile')
-    .populate('appointment', 'bookingReference')
+    .populate('appointment', 'bookingReference totalAmount remainingBalance paymentOption status')
     .sort({ createdAt: -1 });
   res.json(payments.map((payment) => withScreenshotUrl(payment, req)));
 };
 
 export const verifyPayment = async (req, res) => {
-  const payment = await Payment.findById(req.params.id).populate('appointment');
-  if (!payment) return res.status(404).json({ message: 'Payment not found' });
-
   const newStatus = req.body.status;
   const verificationNote = String(req.body.verificationNote || '').trim().slice(0, 500);
   if (!['verified', 'rejected'].includes(newStatus)) {
     return res.status(400).json({ message: 'Payment status must be verified or rejected' });
   }
-  if (payment.status !== 'pending') {
-    return res.status(400).json({ message: 'Only pending payments can be verified or rejected' });
-  }
   if (newStatus === 'rejected' && !verificationNote) {
     return res.status(400).json({ message: 'Add a reason before rejecting a payment' });
   }
 
-  payment.status = newStatus;
-  payment.verificationNote = verificationNote;
-  payment.verifiedAt = new Date();
-  payment.verifiedBy = req.user._id;
-  await payment.save();
+  // A pending-only update prevents two quick clicks from approving the same
+  // screenshot twice and adding the advance amount twice.
+  const payment = await Payment.findOneAndUpdate(
+    { _id: req.params.id, status: 'pending' },
+    {
+      $set: {
+        status: newStatus,
+        verificationNote,
+        verifiedAt: new Date(),
+        verifiedBy: req.user._id,
+      },
+    },
+    { new: true }
+  ).populate('appointment');
+
+  if (!payment) {
+    const existing = await Payment.findById(req.params.id).select('status');
+    if (!existing) return res.status(404).json({ message: 'Payment not found' });
+    return res.status(400).json({ message: 'This payment has already been reviewed' });
+  }
+  if (!payment.appointment) {
+    return res.status(409).json({ message: 'This payment is not linked to a booking' });
+  }
 
   console.log(`[Payment Verification] Payment ID: ${payment._id}, Status: ${newStatus}, Amount: ${payment.amount}`);
 
@@ -98,6 +110,9 @@ export const addPayment = async (req, res) => {
   if (appointment.customer.toString() !== req.user._id.toString()) {
     return res.status(403).json({ message: 'Not authorized' });
   }
+  if (['completed', 'cancelled', 'rejected'].includes(appointment.status)) {
+    return res.status(400).json({ message: 'This booking cannot accept another payment' });
+  }
 
   const payAmount = parseFloat(amount);
   if (payAmount < 1 || payAmount > appointment.remainingBalance) {
@@ -106,11 +121,17 @@ export const addPayment = async (req, res) => {
 
   let screenshot = '';
   if (req.file) {
+    await compressImage(req.file.path);
     screenshot = req.file.filename;
   }
 
   if (!screenshot) {
     return res.status(400).json({ message: 'Upload the payment screenshot before submitting it for verification' });
+  }
+
+  const pendingPayment = await Payment.exists({ appointment: appointment._id, status: 'pending' });
+  if (pendingPayment) {
+    return res.status(409).json({ message: 'A payment screenshot for this booking is already awaiting verification' });
   }
 
   const payment = await Payment.create({
