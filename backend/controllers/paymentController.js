@@ -117,7 +117,7 @@ export const addPayment = async (req, res) => {
   }
 
   const payAmount = parseFloat(amount);
-  if (payAmount < 1 || payAmount > appointment.remainingBalance) {
+  if (!Number.isFinite(payAmount) || payAmount < 1 || payAmount > appointment.remainingBalance) {
     return res.status(400).json({ message: 'Invalid payment amount' });
   }
 

@@ -18,8 +18,9 @@ if (!fs.existsSync(uploadDir)) {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `${uuidv4()}${ext}`);
+    // Every accepted image is compressed to JPEG immediately after upload, so
+    // give it a matching extension from the beginning.
+    cb(null, `${uuidv4()}.jpg`);
   },
 });
 

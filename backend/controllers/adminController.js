@@ -149,7 +149,11 @@ export const getNotifications = async (req, res) => {
 };
 
 export const markNotificationRead = async (req, res) => {
-  await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
+  const notification = await Notification.findOneAndUpdate(
+    { _id: req.params.id, recipient: req.user._id },
+    { isRead: true }
+  );
+  if (!notification) return res.status(404).json({ message: 'Notification not found' });
   res.json({ message: 'Marked as read' });
 };
 
