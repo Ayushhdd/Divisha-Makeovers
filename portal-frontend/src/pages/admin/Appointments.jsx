@@ -66,10 +66,6 @@ export default function AdminAppointments() {
   };
 
   const reviewPayment = async (payment, status) => {
-    if (status === 'verified' && !window.confirm('Confirm that you matched this payment in the real UPI or bank app.')) {
-      return;
-    }
-
     const verificationNote = status === 'rejected'
       ? window.prompt('Why is this payment being rejected?')
       : 'Verified by owner';
