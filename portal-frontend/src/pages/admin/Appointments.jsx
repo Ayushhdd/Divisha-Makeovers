@@ -185,7 +185,7 @@ export default function AdminAppointments() {
                           <span className="rounded-xl border border-red-100 px-3 py-2 text-center text-sm text-red-600">Screenshot unavailable</span>
                         )}
                         <button onClick={() => reviewPayment(payment, 'verified')} disabled={verifying || rejecting} className="btn-primary text-sm py-2">
-                          {verifying ? 'Verifying...' : 'Verify in UPI App'}
+                          {verifying ? 'Approving...' : 'Approve Payment'}
                         </button>
                         <button onClick={() => reviewPayment(payment, 'rejected')} disabled={verifying || rejecting} className="btn-outline text-sm py-2 text-red-600">
                           {rejecting ? 'Rejecting...' : 'Reject Payment'}

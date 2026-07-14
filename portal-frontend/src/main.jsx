@@ -13,11 +13,11 @@ const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     const registrations = await navigator.serviceWorker.getRegistrations();
-    await Promise.all(
-      registrations
-        .filter((registration) => new URL(registration.scope).pathname.startsWith('/portal/'))
-        .map((registration) => registration.unregister())
+    const portalRegistrations = registrations.filter((registration) =>
+      new URL(registration.scope).pathname.startsWith('/portal/')
     );
+    const wasControlledByServiceWorker = Boolean(navigator.serviceWorker.controller);
+    await Promise.all(portalRegistrations.map((registration) => registration.unregister()));
 
     if ('caches' in window) {
       const cacheKeys = await caches.keys();
@@ -26,6 +26,19 @@ if ('serviceWorker' in navigator) {
           .filter((key) => /workbox|vite-plugin-pwa|google-fonts-cache/i.test(key))
           .map((key) => caches.delete(key))
       );
+    }
+
+    // Unregistering does not release the page that is already controlled.
+    // Reload exactly once so Chrome switches to the current deployed bundle.
+    if (
+      portalRegistrations.length > 0 &&
+      wasControlledByServiceWorker &&
+      !sessionStorage.getItem('portal-cache-cleanup-reloaded')
+    ) {
+      sessionStorage.setItem('portal-cache-cleanup-reloaded', 'true');
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem('portal-cache-cleanup-reloaded');
     }
   });
 }
