@@ -1,8 +1,10 @@
 import "./globals.css";
 import { Playfair_Display, Inter } from "next/font/google";
+import Script from "next/script";
 import PageWrapper from "./components/PageWrapper";
 
 const siteUrl = "https://divishamakeovers.com";
+const googleAnalyticsId = "G-CG4F8CL9RL";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -183,6 +185,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${inter.variable}`}>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){window.dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${googleAnalyticsId}');`}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
