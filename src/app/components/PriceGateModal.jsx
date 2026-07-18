@@ -157,10 +157,10 @@ export default function PriceGateModal({
             value={form.name}
             onChange={updateField}
             required
-            minLength={2}
+            minLength={5}
             maxLength={80}
             autoComplete="name"
-            placeholder="Your real name"
+            placeholder="Full name (first and last name)"
             className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-pink-300/70"
           />
 
