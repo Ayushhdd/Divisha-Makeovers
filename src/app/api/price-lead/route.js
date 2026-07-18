@@ -1,5 +1,12 @@
 export const runtime = "nodejs";
 
+import {
+  getIndianMobileError,
+  getNameError,
+  normalizeIndianMobile,
+  normalizeLeadName,
+} from "@/app/lib/priceLeadValidation";
+
 const DEFAULT_NOTIFY_EMAIL = "divishamakeovers5@gmail.com";
 
 function cleanText(value, maxLength = 200) {
@@ -23,10 +30,6 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function isValidPhone(phone) {
-  return /^[+\d][\d\s().-]{6,17}$/.test(phone);
-}
-
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -36,8 +39,8 @@ export async function POST(request) {
     }
 
     const lead = {
-      name: cleanText(body.name, 80),
-      whatsapp: cleanText(body.whatsapp, 18),
+      name: normalizeLeadName(body.name),
+      whatsapp: normalizeIndianMobile(body.whatsapp),
       email: cleanText(body.email, 120),
       serviceName: cleanText(body.serviceName, 120),
       packageName: cleanText(body.packageName, 180),
@@ -48,8 +51,21 @@ export async function POST(request) {
       return Response.json({ error: "Please fill the required details." }, { status: 400 });
     }
 
-    if (!isValidPhone(lead.whatsapp)) {
-      return Response.json({ error: "Please enter a valid WhatsApp number." }, { status: 400 });
+    const nameError = getNameError(lead.name);
+    const whatsappError = getIndianMobileError(lead.whatsapp);
+
+    if (nameError || whatsappError) {
+      return Response.json(
+        { error: nameError || whatsappError },
+        { status: 400 }
+      );
+    }
+
+    if (body.confirmedWhatsApp !== true) {
+      return Response.json(
+        { error: "Please confirm that this is your active WhatsApp number." },
+        { status: 400 }
+      );
     }
 
     if (!isValidEmail(lead.email)) {
@@ -74,7 +90,7 @@ export async function POST(request) {
         <p style="margin: 0 0 18px;">Someone viewed a package price on the Divisha Makeovers website.</p>
         <table style="border-collapse: collapse; width: 100%; max-width: 620px;">
           <tr><td style="padding: 8px 0; font-weight: 700;">Name</td><td>${escapeHtml(lead.name)}</td></tr>
-          <tr><td style="padding: 8px 0; font-weight: 700;">WhatsApp</td><td>${escapeHtml(lead.whatsapp)}</td></tr>
+          <tr><td style="padding: 8px 0; font-weight: 700;">WhatsApp</td><td>${escapeHtml(`+91 ${lead.whatsapp}`)}</td></tr>
           <tr><td style="padding: 8px 0; font-weight: 700;">Email</td><td>${escapeHtml(lead.email || "Not provided")}</td></tr>
           <tr><td style="padding: 8px 0; font-weight: 700;">Service</td><td>${escapeHtml(lead.serviceName)}</td></tr>
           <tr><td style="padding: 8px 0; font-weight: 700;">Package</td><td>${escapeHtml(lead.packageName)}</td></tr>

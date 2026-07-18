@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { useLockedBodyScroll } from "@/app/hooks/useLockedBodyScroll";
+import {
+  getIndianMobileError,
+  getNameError,
+  normalizeIndianMobile,
+} from "@/app/lib/priceLeadValidation";
 
 export default function PriceGateModal({
   serviceName,
@@ -18,6 +23,7 @@ export default function PriceGateModal({
     whatsapp: "",
     email: "",
     company: "",
+    confirmedWhatsApp: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -41,13 +47,33 @@ export default function PriceGateModal({
   }, [onClose]);
 
   const updateField = (event) => {
-    const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
+    const { checked, name, type, value } = event.target;
+    const nextValue =
+      type === "checkbox"
+        ? checked
+        : name === "whatsapp"
+          ? normalizeIndianMobile(value)
+          : value;
+
+    setForm((current) => ({ ...current, [name]: nextValue }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+
+    const nameError = getNameError(form.name);
+    const whatsappError = getIndianMobileError(form.whatsapp);
+
+    if (nameError || whatsappError || !form.confirmedWhatsApp) {
+      setError(
+        nameError ||
+          whatsappError ||
+          "Please confirm that this is your active WhatsApp number."
+      );
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -68,6 +94,11 @@ export default function PriceGateModal({
       }
 
       onSuccess();
+
+      window.gtag?.("event", "package_price_unlocked", {
+        service_name: serviceName,
+        package_name: packageName,
+      });
     } catch (submitError) {
       setError(submitError.message);
     } finally {
@@ -126,8 +157,10 @@ export default function PriceGateModal({
             value={form.name}
             onChange={updateField}
             required
+            minLength={2}
             maxLength={80}
-            placeholder="Name"
+            autoComplete="name"
+            placeholder="Your real name"
             className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-pink-300/70"
           />
 
@@ -137,9 +170,11 @@ export default function PriceGateModal({
             onChange={updateField}
             required
             type="tel"
-            inputMode="tel"
-            maxLength={18}
-            placeholder="WhatsApp number"
+            inputMode="numeric"
+            minLength={10}
+            maxLength={10}
+            autoComplete="tel"
+            placeholder="10-digit WhatsApp number"
             className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-pink-300/70"
           />
 
@@ -153,8 +188,23 @@ export default function PriceGateModal({
             className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-pink-300/70"
           />
 
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-xs leading-relaxed text-white/65">
+            <input
+              name="confirmedWhatsApp"
+              checked={form.confirmedWhatsApp}
+              onChange={updateField}
+              required
+              type="checkbox"
+              className="mt-0.5 size-4 accent-pink-500"
+            />
+            <span>
+              This is my active WhatsApp number and Divisha Makeovers may
+              contact me about this package.
+            </span>
+          </label>
+
           <p className="text-xs leading-relaxed text-white/45">
-            We will only use this to share booking details for this service.
+            Incorrect or temporary details will not unlock the package price.
           </p>
 
           {error && (
