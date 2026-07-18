@@ -53,11 +53,6 @@ export function normalizeLeadName(value) {
 
 export function getNameError(value) {
   const name = normalizeLeadName(value);
-  const compactName = name.toLocaleLowerCase("en-IN").replace(/[\s'-]/g, "");
-
-  if (name.length < 2) {
-    return "Please enter your real name.";
-  }
 
   if (!/^[\p{L}\p{M}][\p{L}\p{M}\s'-]*$/u.test(name)) {
     return "Name can contain letters, spaces, apostrophes and hyphens only.";
@@ -100,12 +95,7 @@ export function getNameError(value) {
     );
   });
 
-  if (
-    hasSuspiciousWord ||
-    blockedNames.has(compactName) ||
-    /^(.)\1{2,}$/u.test(compactName) ||
-    compactName.length < 4
-  ) {
+  if (hasSuspiciousWord) {
     return "Please enter your real name.";
   }
 
