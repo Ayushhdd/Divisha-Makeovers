@@ -39,6 +39,13 @@ export default function AdminLayout() {
         <div className="p-4 border-b border-softpink-100">
           <Logo size="sm" />
           <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
+          <a
+            href="/"
+            className="mt-3 inline-flex items-center rounded-lg border border-softpink-200 px-3 py-2 text-sm font-medium text-rosegold-600 transition-colors hover:bg-softpink-50"
+          >
+            <span aria-hidden="true">← </span>
+            Main Website
+          </a>
         </div>
         <nav className="p-3 space-y-1">
           {navItems.map((item) => (

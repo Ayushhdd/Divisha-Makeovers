@@ -21,6 +21,13 @@ export default function CustomerLayout() {
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Logo size="sm" />
           <div className="flex items-center gap-3">
+            <a
+              href="/"
+              className="rounded-lg border border-softpink-200 px-3 py-1.5 text-sm font-medium text-rosegold-600 transition-colors hover:bg-softpink-50"
+            >
+              <span aria-hidden="true">← </span>
+              Main Website
+            </a>
             <span className="text-sm text-gray-600 hidden sm:block">{user?.fullName}</span>
             <button onClick={() => dispatch(logout())} className="text-sm text-rosegold-600 hover:underline">
               Logout

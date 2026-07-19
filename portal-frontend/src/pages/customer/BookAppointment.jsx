@@ -295,20 +295,6 @@ export default function BookAppointment() {
       setError('Please upload the payment screenshot before submitting it for verification.');
       return;
     }
-    setError('');
-    if (selected.length === 0 && customServices.length === 0 && !form.customServiceRequest) {
-      setError('Please select at least one service or add a custom request');
-      return;
-    }
-    if (!form.appointmentDate || !form.appointmentTime || !form.venue) {
-      setError('Please fill appointment date, time and venue');
-      return;
-    }
-    if (form.paymentOption === 'pay_now' && advance < 1) {
-      setError('Minimum advance of ₹1 required for Pay Now');
-      return;
-    }
-
     const submittedAdvance = form.paymentOption === 'pay_now' ? advance : 0;
     setSubmitting(true);
     const formData = new FormData();
@@ -331,8 +317,9 @@ export default function BookAppointment() {
       navigate('/divisha/appointments');
     } catch (err) {
       setError(err.response?.data?.message || 'Booking failed');
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
   const addCustomService = () => {
@@ -721,9 +708,9 @@ export default function BookAppointment() {
           {form.paymentOption === 'pay_now' && settings && (
             <div className="card space-y-3">
               <div className="flex flex-col items-center gap-3 text-center">
-                {(settings.qrCodeUrl && !qrImageFailed) || generatedQrCode ? (
+                {generatedQrCode || (settings.qrCodeUrl && !qrImageFailed) ? (
                   <img
-                    src={settings.qrCodeUrl && !qrImageFailed ? settings.qrCodeUrl : generatedQrCode}
+                    src={generatedQrCode || settings.qrCodeUrl}
                     alt="Payment QR"
                     className="w-48 rounded-lg border border-softpink-200 bg-white p-2 shadow-sm"
                     loading="lazy"
