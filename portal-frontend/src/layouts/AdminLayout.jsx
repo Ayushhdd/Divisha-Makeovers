@@ -85,10 +85,18 @@ export default function AdminLayout() {
       )}
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b border-softpink-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+        <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-softpink-200 bg-white px-4 py-3">
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-2xl">☰</button>
           <h1 className="font-display text-lg text-rosegold-700 hidden sm:block">Admin Dashboard</h1>
-          <div className="relative">
+          <div className="ml-auto flex items-center gap-2">
+            <a
+              href="/"
+              className="inline-flex items-center whitespace-nowrap rounded-lg border border-softpink-200 px-2.5 py-1.5 text-sm font-medium text-rosegold-600 transition-colors hover:bg-softpink-50 lg:hidden"
+            >
+              <span aria-hidden="true">← </span>
+              Website
+            </a>
+            <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 rounded-xl hover:bg-softpink-50"
@@ -118,6 +126,7 @@ export default function AdminLayout() {
                 )}
               </div>
             )}
+            </div>
           </div>
         </header>
         <main className="flex-1 p-4 sm:p-6 overflow-auto">

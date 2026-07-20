@@ -18,18 +18,19 @@ export default function CustomerLayout() {
   return (
     <div className="min-h-screen flex flex-col pb-20 sm:pb-0">
       <header className="bg-white border-b border-softpink-200 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-2 px-4 py-3">
           <Logo size="sm" />
-          <div className="flex items-center gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-2 max-[359px]:w-full max-[359px]:justify-end">
             <a
               href="/"
-              className="rounded-lg border border-softpink-200 px-3 py-1.5 text-sm font-medium text-rosegold-600 transition-colors hover:bg-softpink-50"
+              className="shrink-0 whitespace-nowrap rounded-lg border border-softpink-200 px-2.5 py-1.5 text-sm font-medium text-rosegold-600 transition-colors hover:bg-softpink-50 sm:px-3"
             >
               <span aria-hidden="true">← </span>
-              Main Website
+              <span className="sm:hidden">Website</span>
+              <span className="hidden sm:inline">Main Website</span>
             </a>
             <span className="text-sm text-gray-600 hidden sm:block">{user?.fullName}</span>
-            <button onClick={() => dispatch(logout())} className="text-sm text-rosegold-600 hover:underline">
+            <button onClick={() => dispatch(logout())} className="shrink-0 whitespace-nowrap text-sm text-rosegold-600 hover:underline">
               Logout
             </button>
           </div>
