@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function HeroBackground() {
   return (
-    <div className="fixed inset-0 -z-20 overflow-hidden bg-[#4a3034]">
+    <div className="pointer-events-none fixed inset-0 -z-20 overflow-hidden bg-[#4a3034]">
       <div className="absolute inset-0 bg-gradient-to-r from-[#4e3838] via-[#6e4248] to-[#351c20]" />
       <Image
         src="/image-hero/hero2.jpg"
@@ -19,7 +19,6 @@ export default function HeroBackground() {
           md:scale-100
           scale-[1.05]
           object-[75%_50%]
-          will-change-transform
         "
       />
 

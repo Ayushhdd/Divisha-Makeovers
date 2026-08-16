@@ -3,7 +3,7 @@
 /* ================= BASE ================= */
 
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-y: auto;
 }
 
@@ -98,15 +98,6 @@ h2 {
 
 /* ================= GLOBAL GLASS ================= */
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  backdrop-filter: contrast(1.08) saturate(1.15);
-  pointer-events: none;
-  z-index: 0;
-}
-
 body > :not([data-floating-layer]) {
   position: relative;
   z-index: 1;
@@ -127,10 +118,6 @@ body > :not([data-floating-layer]) {
 /* ================= MOBILE TYPOGRAPHY ================= */
 
 @media (max-width: 767px) {
-  body::before {
-    backdrop-filter: none;
-  }
-
   h1 {
     font-size: 2rem;
     line-height: 1.25;

@@ -18,15 +18,13 @@ import ClosingEditorial from "./components/ClosingEditorial";
 const sectionVariants = {
   hidden: {
     opacity: 0,
-    y: 60,
-    filter: "blur(8px)",
+    y: 24,
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
-      duration: 1.3,
+      duration: 0.55,
       ease: [0.16, 1, 0.3, 1],
     },
   },
@@ -34,7 +32,7 @@ const sectionVariants = {
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden text-white">
+    <main className="relative min-h-screen overflow-x-clip text-white">
       
       {/* Background */}
       <HeroBackground />
