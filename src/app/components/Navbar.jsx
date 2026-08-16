@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -25,19 +25,6 @@ export default function Navbar() {
   const [homeOpen, setHomeOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [hidden, setHidden] = useState(false);
-  const lastScrollY = useRef(0);
-  const [lockNav, setLockNav] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  /* MOBILE CHECK */
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
   useEffect(() => {
     const prefetchServices = () => {
       services.forEach((service) => router.prefetch(service.href));
@@ -52,45 +39,10 @@ export default function Navbar() {
     return () => window.clearTimeout(id);
   }, [router]);
 
-  /* DESKTOP SCROLL HIDE */
-  useEffect(() => {
-    if (isMobile || lockNav) return;
-
-    const scrollContainer = document.getElementById("scroll-container");
-    const overflowY = scrollContainer
-      ? window.getComputedStyle(scrollContainer).overflowY
-      : "";
-    const canUseScrollContainer =
-      scrollContainer &&
-      ["auto", "scroll"].includes(overflowY) &&
-      scrollContainer.scrollHeight > scrollContainer.clientHeight;
-    const scrollTarget = canUseScrollContainer ? scrollContainer : window;
-
-    const handleScroll = () => {
-      const y = scrollTarget === window ? window.scrollY : scrollTarget.scrollTop;
-      setHidden(y > lastScrollY.current && y > 80);
-      lastScrollY.current = y;
-    };
-
-    scrollTarget.addEventListener("scroll", handleScroll, { passive: true });
-    return () => scrollTarget.removeEventListener("scroll", handleScroll);
-  }, [lockNav, isMobile]);
-
   /* LOCK BODY SCROLL ON MOBILE MENU */
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => (document.body.style.overflow = "");
-  }, [mobileOpen]);
-
-  /* LOCK NAV WHEN MOBILE MENU OPEN */
-  useEffect(() => {
-    if (mobileOpen) {
-      setHidden(false);
-      setLockNav(true);
-    } else {
-      const t = setTimeout(() => setLockNav(false), 300);
-      return () => clearTimeout(t);
-    }
   }, [mobileOpen]);
 
   const handleLogoClick = (event) => {
@@ -106,9 +58,7 @@ export default function Navbar() {
       <div className="h-[88px] md:h-[96px]" />
 
       <nav
-        className={`fixed top-0 left-0 w-full z-50 transition-transform duration-500 ease-out ${
-          hidden && !mobileOpen ? "-translate-y-full" : "translate-y-0"
-        }`}
+        className="fixed top-0 left-0 z-50 w-full"
       >
         {/* GOLD LINE */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#f0d26d]/40 to-transparent" />

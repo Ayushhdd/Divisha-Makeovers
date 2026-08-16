@@ -2,11 +2,6 @@
 
 /* ================= BASE ================= */
 
-html, body {
-  overflow-x: clip;
-  overflow-y: auto;
-}
-
 body {
   overscroll-behavior-y: auto;
   overscroll-behavior-x: none;

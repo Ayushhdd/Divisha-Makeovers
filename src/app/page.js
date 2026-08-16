@@ -15,24 +15,9 @@ import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import ClosingEditorial from "./components/ClosingEditorial";
 
-const sectionVariants = {
-  hidden: {
-    opacity: 0,
-    y: 24,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.55,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-x-clip text-white">
+    <main className="relative min-h-screen text-white">
       
       {/* Background */}
       <HeroBackground />
@@ -138,88 +123,60 @@ className="
       </section>
 
       {/* ================= ABOUT ================= */}
-      <motion.section
+      <section
         id="about"
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <About />
-      </motion.section>
+      </section>
 
       {/* ================= WHY CHOOSE ================= */}
-      <motion.section
+      <section
         id="why-choose"
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <WhyChoose />
-      </motion.section>
+      </section>
 
       {/* ================= GALLERY ================= */}
-      <motion.section
+      <section
         id="gallery"
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <div className="pink-glow top-1/2 right-10"></div>
         <Gallery />
-      </motion.section>
+      </section>
 
       {/* ================= SERVICES ================= */}
-      <motion.section
+      <section
         id="services"
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <Services />
-      </motion.section>
+      </section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <motion.section
+      <section
         id="testimonials"
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <Testimonials />
-      </motion.section>
+      </section>
 
       {/* ================= CONTACT ================= */}
-      <motion.section
+      <section
         id="contact"
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <Contact />
-      </motion.section>
+      </section>
 
       {/* ================= FOOTER ================= */}
-      <motion.section
+      <section
         className="relative z-10 section-bg"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
       >
         <ClosingEditorial />
-      </motion.section>
+      </section>
 
     </main>
   );
