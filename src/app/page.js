@@ -34,7 +34,7 @@ const sectionVariants = {
 
 export default function Home() {
   return (
-    <main className="relative text-white min-h-screen overflow-hidden">
+    <main className="relative min-h-screen overflow-x-hidden text-white">
       
       {/* Background */}
       <HeroBackground />
